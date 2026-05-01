@@ -8,7 +8,7 @@
 definePageMeta({
   key: "home",
   layout: "main-layout",
-  order: 0,
+  order: 1,
 });
 </script>
 
@@ -25,6 +25,7 @@ definePageMeta({
 .fake-bento {
   display: flex;
   flex-direction: column;
+  // width: 750px;
   height: 100%;
 }
 

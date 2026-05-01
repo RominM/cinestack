@@ -11,7 +11,6 @@ export const useTmdbTrending = () => {
 
   return {
     getTrendingMoviesByWeek: async (params?: Record<string, string>): TmdbRequestResult<TmdbPagedResponse<TmdbMovie>> => {
-      console.log('appel trending movies')
       const { data, error } = await get<TmdbPagedResponse<TmdbMovie>>(`${path}/movie/week`, { params })
       if (!data || error) return { data, error }
       

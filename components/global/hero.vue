@@ -1,8 +1,11 @@
 <template>
   <div class="main-hero">
-    <hero-header :projects="moviesHeader" />
+    <hero-header v-if="moviesHeader.length" :projects="moviesHeader" />
     <carousel>
-      <list-project-cards :projects="moviesCarousel" />
+      <list-project-cards
+        v-if="moviesCarousel.length"
+        :projects="moviesCarousel"
+      />
     </carousel>
   </div>
 </template>
