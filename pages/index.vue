@@ -2,16 +2,18 @@
   <div class="home">
     <hero-header v-if="moviesHeader.length" :medias="moviesHeader" />
     <div class="home__content">
-      <div class="test">
-        <h2>Tendances</h2>
-        <carousel>
-          <list-project-cards
-            v-if="moviesCarousel.length"
-            :medias="moviesCarousel"
-            base-route="/films"
-          />
-        </carousel>
-      </div>
+      <section-cards
+        v-if="moviesCarousel.length"
+        :medias="moviesCarousel"
+        base-route="/films"
+        title="Tendences"
+      />
+      <section-cards
+        v-if="moviesCarousel.length"
+        :medias="moviesCarousel"
+        base-route="/films"
+        title="Tendences"
+      />
     </div>
   </div>
 </template>
@@ -33,9 +35,8 @@ const moviesHeader = ref<TmdbMedia[]>([]);
 onMounted(() => getTrendingMovies());
 
 async function getTrendingMovies() {
-  const { data, error } = await useAPI().tmdb.trending.getTrendingMoviesByWeek({
-    page: "1",
-  });
+  const { data, error } =
+    await useAPI().tmdb.trending.getTrendingMoviesByWeek();
 
   if (!data || error) return;
 
@@ -50,18 +51,7 @@ async function getTrendingMovies() {
 .home {
   &__content {
     position: relative;
-    margin-top: -5vh;
     z-index: 9;
-    .test {
-      display: flex;
-      flex-direction: column;
-      h2 {
-        position: relative;
-        margin-bottom: -140px;
-        width: 150px;
-        background-color: red;
-      }
-    }
   }
 }
 </style>

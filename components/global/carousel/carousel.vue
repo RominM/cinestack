@@ -42,7 +42,7 @@ const next = () => {
   align-items: center;
   justify-content: center;
   gap: 0;
-  padding: 200px 100px;
+  padding: 155px 100px;
   overflow-x: auto;
   overflow-y: visible;
   scroll-behavior: smooth;
