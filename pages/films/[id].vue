@@ -1,14 +1,18 @@
 <template>
   <div v-if="movie" class="movie">
-    <hero-header :medias="[movie]" />
-    <media-details :media="movie" :credits="credits" />
+    <hero-header
+      v-if="movie.backdropPath"
+      :srcs="[{ src: movie.backdropPath, alt: movie.name }]"
+    />
+    <media-details :media="movie" :credits="rawMovie?.credits" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { useAPI } from "~/composables/api/useApi";
 import { useUtils } from "~/composables/global/useUtils";
-import type { TmdbCredits, TmdbMedia } from "~/types/ressources/TMDB/common";
+import type { TmdbMedia } from "~/types/ressources/TMDB/common";
+import type { TmdbMovieDetail } from "~/types/ressources/TMDB/movie";
 
 definePageMeta({
   key: "movies",
@@ -20,20 +24,20 @@ const route = useRoute();
 const id = route.params.id as string;
 
 const movie = ref<TmdbMedia>();
-const credits = ref<TmdbCredits>();
+const rawMovie = ref<TmdbMovieDetail>();
 
 onMounted(() => fetchAll());
 
 async function fetchAll() {
-  const [movieRes, creditsRes] = await Promise.all([
-    useAPI().tmdb.movie.getMovieDetail(id),
-    useAPI().tmdb.movie.getMovieCredits(id),
-  ]);
+  const { data, error } = await useAPI().tmdb.movie.getMovieDetail(id, {
+    append_to_response: "credits,videos,images,recommendations",
+  });
 
-  console.log({ creditsRes });
+  if (!data || error) return;
+  console.log({ data });
 
-  if (movieRes.data) movie.value = useUtils().mappers.movie(movieRes.data);
-  if (creditsRes.data) credits.value = creditsRes.data;
+  rawMovie.value = data;
+  movie.value = useUtils().mappers.movie(data);
 }
 </script>
 

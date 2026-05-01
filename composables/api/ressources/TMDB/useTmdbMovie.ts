@@ -1,30 +1,47 @@
-import type { TmdbPagedResponse, TmdbCredits, TmdbVideos, TmdbImages } from '~/types/ressources/TMDB/common'
+import type { TmdbPagedResponse, TmdbRequestResult, TmdbCredits, TmdbVideos, TmdbImages } from '~/types/ressources/TMDB/common'
 import type { TmdbMovie, TmdbMovieDetail } from '~/types/ressources/TMDB/movie'
 import { useRequest } from '../../useRequest'
+import { BASE_TMDB_PATH } from '~/const/tmdb'
 
 export const useTmdbMovie = () => {
   const { get } = useRequest()
-
-  const fetch = <T>(endpoint: string, params?: Record<string, string>) =>
-    get<T>(`/tmdb${endpoint}`, { params })
+  const path = `${BASE_TMDB_PATH}/movie`
 
   return {
-    getMovieDetail: (id: number | string) =>
-      fetch<TmdbMovieDetail>(`/movie/${id}`),
+    getMovieDetail: async (id: number | string, params?: Record<string, string>): TmdbRequestResult<TmdbMovieDetail> => {
+      const { data, error } = await get<TmdbMovieDetail>(`${path}/${id}`, { params })
+      if (!data || error) return { data, error }
+      return { data, error }
+    },
 
-    getMovieCredits: (id: number | string) =>
-      fetch<TmdbCredits>(`/movie/${id}/credits`),
+    getMovieCredits: async (id: number | string): TmdbRequestResult<TmdbCredits> => {
+      const { data, error } = await get<TmdbCredits>(`${path}/${id}/credits`)
+      if (!data || error) return { data, error }
+      return { data, error }
+    },
 
-    getMovieVideos: (id: number | string) =>
-      fetch<TmdbVideos>(`/movie/${id}/videos`),
+    getMovieVideos: async (id: number | string): TmdbRequestResult<TmdbVideos> => {
+      const { data, error } = await get<TmdbVideos>(`${path}/${id}/videos`)
+      if (!data || error) return { data, error }
+      return { data, error }
+    },
 
-    getMovieImages: (id: number | string) =>
-      fetch<TmdbImages>(`/movie/${id}/images`),
+    getMovieImages: async (id: number | string): TmdbRequestResult<TmdbImages> => {
+      const { data, error } = await get<TmdbImages>(`${path}/${id}/images`)
+      if (!data || error) return { data, error }
+      return { data, error }
+    },
 
-    getMovieSimilar: (id: number | string, params?: Record<string, string>) =>
-      fetch<TmdbPagedResponse<TmdbMovie>>(`/movie/${id}/similar`, params),
+    getMovieSimilar: async (id: number | string, params?: Record<string, string>): TmdbRequestResult<TmdbPagedResponse<TmdbMovie>> => {
+      const { data, error } = await get<TmdbPagedResponse<TmdbMovie>>(`${path}/${id}/similar`, { params })
+      if (!data || error) return { data, error }
+      return { data, error }
+    },
 
-    getMovieRecommendations: (id: number | string, params?: Record<string, string>) =>
-      fetch<TmdbPagedResponse<TmdbMovie>>(`/movie/${id}/recommendations`, params),
+    getMovieRecommendations: async (id: number | string, params?: Record<string, string>): TmdbRequestResult<TmdbPagedResponse<TmdbMovie>> => {
+      const { data, error } = await get<TmdbPagedResponse<TmdbMovie>>(`${path}/${id}/recommendations`, { params })
+      if (!data || error) return { data, error }
+      return { data, error }
+    },
   }
 }

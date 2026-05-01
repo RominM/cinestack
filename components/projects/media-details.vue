@@ -10,29 +10,16 @@
         <h1 class="media-detail__title">{{ media.name }}</h1>
         <p class="media-detail__tagline">{{ media.tagline }}</p>
         <div class="media-detail__tags">
-          <span v-for="genre in media.genres" :key="genre.id" class="tag">{{
-            genre.name
-          }}</span>
+          <span v-for="genre in media.genres" :key="genre.id" class="tag">
+            {{ genre.name }}</span
+          >
           <span class="tag">{{ releaseYear }}</span>
           <span v-if="media.runtime" class="tag">{{ formattedRuntime }}</span>
         </div>
       </div>
     </div>
 
-    <div class="media-detail__stats">
-      <div class="stat">
-        <span class="stat__value">{{ media.voteAverage.toFixed(1) }}</span>
-        <span class="stat__label">Note</span>
-      </div>
-      <div class="stat">
-        <span class="stat__value">{{ formattedBudget }}</span>
-        <span class="stat__label">Budget</span>
-      </div>
-      <div class="stat">
-        <span class="stat__value">{{ formattedRevenue }}</span>
-        <span class="stat__label">Recettes</span>
-      </div>
-    </div>
+    <media-stats :media="media" />
 
     <div v-if="credits?.cast?.length" class="media-detail__cast">
       <h3 class="media-detail__cast-title">Casting</h3>
@@ -54,6 +41,8 @@
         </div>
       </div>
     </div>
+
+    <p>{{ media.overview }}</p>
   </div>
 </template>
 
@@ -73,16 +62,6 @@ const formattedRuntime = computed(() => {
   const h = Math.floor(props.media.runtime / 60);
   const m = props.media.runtime % 60;
   return `${h}h${m.toString().padStart(2, "0")}`;
-});
-
-const formattedBudget = computed(() => {
-  // if (!props.media.budget) return "N/A";
-  // return `${(props.media.budget / 1_000_000).toFixed(0)}M$`;
-});
-
-const formattedRevenue = computed(() => {
-  // if (!props.media.revenue) return "N/A";
-  // return `${(props.media.revenue / 1_000_000).toFixed(0)}M$`;
 });
 </script>
 
@@ -131,40 +110,6 @@ const formattedRevenue = computed(() => {
     gap: 6px;
     flex-wrap: wrap;
     margin-top: 4px;
-  }
-
-  &__stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    border: 0.5px solid #ffffff18;
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 24px;
-
-    .stat {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 16px;
-      gap: 4px;
-      border-right: 0.5px solid #ffffff18;
-
-      &:last-child {
-        border-right: none;
-      }
-
-      &__value {
-        font-size: 18px;
-        font-weight: 500;
-      }
-
-      &__label {
-        font-size: 11px;
-        color: #ffffff55;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-      }
-    }
   }
 
   &__cast-title {

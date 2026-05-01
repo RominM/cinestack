@@ -1,6 +1,10 @@
 <template>
   <div class="home">
-    <hero-header v-if="moviesHeader.length" :medias="moviesHeader" />
+    <hero-header
+      :srcs="
+        moviesHeader.map((m) => ({ src: m.backdropPath ?? '', alt: m.name }))
+      "
+    />
     <div class="home__content">
       <section-cards
         v-if="moviesCarousel.length"
