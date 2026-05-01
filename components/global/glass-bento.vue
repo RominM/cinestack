@@ -16,8 +16,8 @@ const props = defineProps({ transparent: Boolean });
 
   &.transparent {
     background: rgba(255, 255, 255, 0.11);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(20px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.664);
+    backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(6.3px);
   }
 }

@@ -1,10 +1,17 @@
 <template>
-  <div v-if="movie" class="movie">
-    <hero-header
-      v-if="movie.backdropPath"
-      :srcs="[{ src: movie.backdropPath, alt: movie.name }]"
+  <loader v-if="isLoading" />
+
+  <div v-else-if="rawMovie" class="movie">
+    <hero-header v-if="movie" :movies="[movie]" />
+
+    <media-details :raw="rawMovie" />
+
+    <section-cards
+      v-if="recommendations.length"
+      :medias="recommendations"
+      base-route="/films"
+      title="Recommandation"
     />
-    <media-details :media="movie" :credits="rawMovie?.credits" />
   </div>
 </template>
 
@@ -15,7 +22,7 @@ import type { TmdbMedia } from "~/types/ressources/TMDB/common";
 import type { TmdbMovieDetail } from "~/types/ressources/TMDB/movie";
 
 definePageMeta({
-  key: "movies",
+  key: (route) => route.fullPath,
   layout: "main-layout",
   order: 2,
 });
@@ -23,21 +30,30 @@ definePageMeta({
 const route = useRoute();
 const id = route.params.id as string;
 
-const movie = ref<TmdbMedia>();
+const isLoading = ref<boolean>(false);
 const rawMovie = ref<TmdbMovieDetail>();
 
-onMounted(() => fetchAll());
+const movie = computed<TmdbMedia | undefined>(() =>
+  rawMovie.value ? useUtils().mappers.movie(rawMovie.value) : undefined,
+);
 
-async function fetchAll() {
+const recommendations = computed<TmdbMedia[]>(
+  () =>
+    rawMovie.value?.recommendations?.results.map(useUtils().mappers.movie) ??
+    [],
+);
+
+onMounted(() => getMovieDetails());
+
+async function getMovieDetails() {
+  isLoading.value = true;
   const { data, error } = await useAPI().tmdb.movie.getMovieDetail(id, {
     append_to_response: "credits,videos,images,recommendations",
   });
+  isLoading.value = false;
 
   if (!data || error) return;
-  console.log({ data });
-
   rawMovie.value = data;
-  movie.value = useUtils().mappers.movie(data);
 }
 </script>
 

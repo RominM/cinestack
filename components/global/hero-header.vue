@@ -1,24 +1,30 @@
 <template>
   <div class="hero-header">
     <div class="hero-header__track" :style="trackStyle">
-      <div v-for="(item, i) in srcs" :key="i" class="hero-header__slide">
+      <div
+        v-for="(item, i) in movies"
+        :key="item.id"
+        class="hero-header__slide"
+      >
         <img
-          :src="`https://image.tmdb.org/t/p/original${item.src}`"
-          :alt="item.alt"
+          :src="`https://image.tmdb.org/t/p/original${item.backdropPath}`"
+          :alt="item.name"
           :style="
             i === currentIndex
               ? { transform: `translateY(${parallaxOffset}px)` }
               : {}
           "
         />
+        <div class="hero-header__slide__gradient" />
+        <hero-content v-if="showContent" :media="item" />
       </div>
     </div>
 
-    <div v-if="srcs.length > 1" class="hero-header__dots">
+    <div v-if="movies.length > 1" class="hero-header__dots">
       <button
-        v-for="(_, i) in srcs"
+        v-for="(_, i) in movies"
         :key="i"
-        :class="['hero-header__dot', { active: i === currentIndex }]"
+        :class="['hero-header__dots__dot', { active: i === currentIndex }]"
         @click="currentIndex = i"
       />
     </div>
@@ -26,14 +32,16 @@
 </template>
 
 <script setup lang="ts">
+import type { TmdbMedia } from "~/types/ressources/TMDB/common";
+
 const props = defineProps({
-  srcs: {
-    type: Array as PropType<{ src: string; alt: string }[]>,
+  movies: {
+    type: Array as PropType<TmdbMedia[]>,
     required: true,
   },
+  showContent: { type: Boolean, default: false },
 });
 
-const imgRef = ref<HTMLElement | null>(null);
 const currentIndex = ref(0);
 const parallaxOffset = ref(0);
 
@@ -42,13 +50,6 @@ const trackStyle = computed(() => ({
 }));
 
 let autoplayInterval: ReturnType<typeof setInterval> | null = null;
-
-onMounted(() => window.addEventListener("scroll", onScroll));
-onUnmounted(() => {
-  window.removeEventListener("scroll", onScroll);
-  if (autoplayInterval) clearInterval(autoplayInterval);
-});
-
 let rafId: number | null = null;
 
 function onScroll() {
@@ -58,13 +59,19 @@ function onScroll() {
   });
 }
 
+onMounted(() => window.addEventListener("scroll", onScroll));
+onUnmounted(() => {
+  window.removeEventListener("scroll", onScroll);
+  if (autoplayInterval) clearInterval(autoplayInterval);
+});
+
 watch(
-  () => props.srcs.length,
+  () => props.movies.length,
   (length) => {
     if (length > 1 && !autoplayInterval) {
       autoplayInterval = setInterval(() => {
-        currentIndex.value = (currentIndex.value + 1) % props.srcs.length;
-      }, 5000);
+        currentIndex.value = (currentIndex.value + 1) % props.movies.length;
+      }, 7000);
     }
   },
   { immediate: true },
@@ -73,7 +80,7 @@ watch(
 
 <style scoped lang="scss">
 .hero-header {
-  height: 80vh;
+  height: 75vh;
   width: 100%;
   overflow: hidden;
   position: relative;
@@ -85,9 +92,12 @@ watch(
   }
 
   &__slide {
+    position: relative;
     flex: 0 0 100%;
     width: 100%;
     height: 100%;
+    margin-top: 68px;
+    border-radius: 24px 24px 0 0;
     overflow: hidden;
 
     img {
@@ -95,6 +105,16 @@ watch(
       height: 130%;
       object-fit: cover;
       object-position: center top;
+    }
+    &__gradient {
+      position: absolute;
+      bottom: 68px;
+      left: 0;
+      width: 100%;
+      height: 70%;
+      background: linear-gradient(to top, $dark-bg 0%, transparent 100%);
+      pointer-events: none;
+      z-index: 1;
     }
   }
 
@@ -104,38 +124,25 @@ watch(
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 8px;
+    gap: 14px;
     z-index: 10;
-  }
+    &__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ffffff44;
+      border: none;
+      cursor: pointer;
+      pointer-events: all;
+      transition:
+        background 0.3s ease,
+        transform 0.3s ease;
 
-  &__dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #ffffff44;
-    border: none;
-    cursor: pointer;
-    pointer-events: all;
-    transition:
-      background 0.3s ease,
-      transform 0.3s ease;
-
-    &.active {
-      background: #fff;
-      transform: scale(1.3);
+      &.active {
+        background: #fff;
+        transform: scale(1.3);
+      }
     }
-  }
-
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 40%;
-    background: linear-gradient(to top, $dark-bg 0%, transparent 100%);
-    pointer-events: none;
-    z-index: 2;
   }
 }
 </style>

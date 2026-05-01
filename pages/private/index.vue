@@ -1,5 +1,7 @@
 <template>
-  <div class="private"></div>
+  <div class="private">
+    <loader />
+  </div>
 </template>
 
 <script setup lang="ts"></script>

@@ -91,7 +91,7 @@ function onLeave(e: MouseEvent) {
   width: 230px;
   height: 40dvh;
   border-radius: 24px;
-  margin-right: -60px;
+  margin-right: -40px;
   overflow: visible;
   transition:
     transform 0.5s ease,

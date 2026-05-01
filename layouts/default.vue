@@ -8,5 +8,6 @@
 
 <style lang="scss" scoped>
 .default-layout {
+  background-color: $dark-bg;
 }
 </style>

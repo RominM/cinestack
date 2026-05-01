@@ -2,19 +2,20 @@
   <transition name="modal-fade">
     <div v-if="isOpen" class="modal" @click="close">
       <transition name="dialog-zoom">
-        <div 
-          v-if="isOpen" 
+        <div
+          v-if="isOpen"
           class="modal__dialog"
           :style="{ minWidth: minWidth, maxWidth: maxWidth }"
           @click.stop
         >
           <div class="modal__dialog--header">
             <h4>{{ title }}</h4>
-            <h-icon 
-              v-if="dismisable && showCross" 
-              class="modal__dialog--header--cross" 
+            <h-icon
+              v-if="dismisable && showCross"
+              class="modal__dialog--header--cross"
               :icon="MultiplicationSignIcon"
-              @click="close"  
+              title="Fermer"
+              @click="close"
             />
           </div>
           <slot />
@@ -25,22 +26,22 @@
 </template>
 
 <script setup lang="ts">
-import { MultiplicationSignIcon } from '@hugeicons/core-free-icons'
+import { MultiplicationSignIcon } from "@hugeicons/core-free-icons";
 
 const props = defineProps({
   isOpen: { type: Boolean, default: false },
   showCross: { type: Boolean, default: false },
   dismisable: { type: Boolean, default: false },
-  title: { type: String, default: '' },
-  minWidth: { type: String, default: '50px' },
-  maxWidth: { type: String, default: '80%' }
-})
+  title: { type: String, default: "" },
+  minWidth: { type: String, default: "50px" },
+  maxWidth: { type: String, default: "80%" },
+});
 
-const emit = defineEmits(['update:isOpen'])
+const emit = defineEmits(["update:isOpen"]);
 
 function close() {
-  if (!props.dismisable) return
-  emit('update:isOpen', false)
+  if (!props.dismisable) return;
+  emit("update:isOpen", false);
 }
 </script>
 
@@ -58,9 +59,11 @@ function close() {
 }
 
 .modal__dialog {
+  width: 100%;
   min-width: 50px;
+  max-width: 90vw;
   min-height: 50px;
-  max-height: 45vw;
+  max-height: 90dvh;
   padding: 10px;
   border-radius: 8px;
   background-color: $dark-surface;
@@ -73,6 +76,7 @@ function close() {
     color: #fff;
     &--cross {
       margin-left: auto;
+      cursor: pointer;
     }
   }
 }

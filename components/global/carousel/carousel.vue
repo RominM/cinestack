@@ -42,14 +42,14 @@ const next = () => {
   align-items: center;
   justify-content: center;
   gap: 0;
-  padding: 155px 100px;
+  padding: 155px 80px;
   overflow-x: auto;
   overflow-y: visible;
   scroll-behavior: smooth;
   -ms-overflow-style: none;
   scrollbar-width: none;
   :deep(> *:first-child) {
-    margin-left: 100%;
+    margin-left: 110%;
   }
   &::-webkit-scrollbar {
     display: none;
