@@ -16,7 +16,7 @@
 import { ref } from "vue";
 
 const container = ref<HTMLElement | null>(null);
-const scrollAmount = 250;
+const scrollAmount = 350;
 
 const prev = () => {
   if (container.value)
@@ -48,9 +48,12 @@ const next = () => {
   scroll-behavior: smooth;
   -ms-overflow-style: none;
   scrollbar-width: none;
-}
-.carousel-container::-webkit-scrollbar {
-  display: none;
+  :deep(> *:first-child) {
+    margin-left: 100%;
+  }
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .arrow {
@@ -59,19 +62,18 @@ const next = () => {
   transform: translateY(-50%);
   height: 50%;
   min-height: 120px;
-  padding: 0 5px;
-  background: none;
-  border: none;
+  padding: 0 12px;
   font-size: 2rem;
   background-color: #ffffff1c;
   color: #ebebebcb;
+  border-radius: 4px;
   cursor: pointer;
-  z-index: 10;
   user-select: none;
   transition: 0.3s;
+  z-index: 9999;
   &:hover {
     color: #000;
-    background-color: #ffffff54;
+    background-color: #d8d8d84f;
   }
 }
 .arrow.left {

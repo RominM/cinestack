@@ -47,7 +47,13 @@ function onLeave() {
 <style scoped lang="scss">
 .list-project-cards {
   display: flex;
-  width: 100%;
+  width: fit-content;
   overflow: visible;
+  &:last-child {
+    margin-right: 50px;
+  }
+  &:first-child {
+    margin-left: 50px;
+  }
 }
 </style>
