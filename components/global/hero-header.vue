@@ -80,10 +80,12 @@ watch(
 
 <style scoped lang="scss">
 .hero-header {
-  height: 75vh;
+  height: 65vh;
   width: 100%;
   overflow: hidden;
   position: relative;
+  margin-top: 68px;
+  border-radius: 24px 24px 0 0;
 
   &__track {
     display: flex;
@@ -96,8 +98,6 @@ watch(
     flex: 0 0 100%;
     width: 100%;
     height: 100%;
-    margin-top: 68px;
-    border-radius: 24px 24px 0 0;
     overflow: hidden;
 
     img {
@@ -108,7 +108,7 @@ watch(
     }
     &__gradient {
       position: absolute;
-      bottom: 68px;
+      bottom: 0;
       left: 0;
       width: 100%;
       height: 70%;
