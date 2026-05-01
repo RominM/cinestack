@@ -21,11 +21,6 @@
 <script setup lang="ts">
 import { useUtils } from "~/composables/global/useUtils";
 import { ERoute } from "~/types/enum/global/navigation";
-import type { RouteRecordNormalized } from "vue-router";
-
-const props = defineProps({
-  routes: { type: Array as PropType<RouteRecordNormalized[]>, required: true },
-});
 
 const userRoutes = useUtils().routes.excludes([ERoute.PRIVATE]);
 

@@ -5,17 +5,20 @@
     @mouseenter="$emit('hover')"
     @mouseleave="onLeave"
     @mousemove="onMouseMove"
+    @click="router.push(href)"
   >
     <div
       class="project-card__glow"
-      :style="{ backgroundImage: `url(${picture.src_m})` }"
+      :style="{
+        backgroundImage: `url(https://image.tmdb.org/t/p/w500${media.posterPath})`,
+      }"
     />
 
     <img
       ref="imgRef"
       class="project-card__img"
-      :src="picture.src_m"
-      :alt="picture.alt"
+      :src="`https://image.tmdb.org/t/p/w500${media.posterPath}`"
+      :alt="media.name"
     />
 
     <div class="project-card__shine" :style="shineStyle" />
@@ -24,13 +27,15 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from "vue";
-import type { TPicture } from "~/types/type/project";
+import type { TmdbMedia } from "~/types/ressources/TMDB/common";
 
 const props = defineProps({
-  id: { type: String, required: true },
-  picture: { type: Object as PropType<TPicture>, required: true },
+  media: { type: Object as PropType<TmdbMedia>, required: true },
+  href: { type: String, required: true },
   isHovered: { type: Boolean, required: true },
 });
+
+const router = useRouter();
 
 const emit = defineEmits(["hover", "leave"]);
 

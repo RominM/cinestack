@@ -1,14 +1,17 @@
 <template>
   <div class="hero-header">
-    <img :src="projects[1].picture.src_l[1]" alt="" />
+    <img
+      :src="`https://image.tmdb.org/t/p/original${medias[1].backdropPath}`"
+      :alt="medias[1].name"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import type { TProject } from "~/types/type/project";
+import type { TmdbMedia } from "~/types/ressources/TMDB/common";
 
 defineProps({
-  projects: { type: Array as PropType<TProject[]>, required: true },
+  medias: { type: Array as PropType<TmdbMedia[]>, required: true },
 });
 </script>
 

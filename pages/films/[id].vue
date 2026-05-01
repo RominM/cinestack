@@ -1,5 +1,5 @@
 <template>
-  <div class="movies"></div>
+  <div class="movie">LE FLIM {{ id }}</div>
 </template>
 
 <script setup lang="ts">
@@ -8,11 +8,12 @@ definePageMeta({
   layout: "main-layout",
   order: 2,
 });
+
+const route = useRoute();
+const id = route.params.id;
 </script>
 
-<style lang="scss" scoped>
-.experiences {
-  height: 100%;
-  width: 100%;
+<style scoped lang="scss">
+.movie {
 }
 </style>

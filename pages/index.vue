@@ -1,13 +1,14 @@
 <template>
   <div class="home">
-    <hero-header v-if="moviesHeader.length" :projects="moviesHeader" />
+    <hero-header v-if="moviesHeader.length" :medias="moviesHeader" />
     <div class="home__content">
       <div class="test">
-        <h2>Tendences</h2>
+        <h2>Tendances</h2>
         <carousel>
           <list-project-cards
-            v-if="moviesCarousel"
-            :projects="moviesCarousel"
+            v-if="moviesCarousel.length"
+            :medias="moviesCarousel"
+            base-route="/films"
           />
         </carousel>
       </div>
@@ -23,12 +24,11 @@ definePageMeta({
 });
 
 import { useAPI } from "~/composables/api/useApi";
-import { ELevelProject, EStatusProject } from "~/types/enum/project/project";
-import type { TmdbMovie } from "~/types/ressources/TMDB/movie";
-import type { TProject } from "~/types/type/project";
+import { useUtils } from "~/composables/global/useUtils";
+import type { TmdbMedia } from "~/types/ressources/TMDB/common";
 
-const moviesCarousel = ref<TProject[]>([]);
-const moviesHeader = ref<TProject[]>([]);
+const moviesCarousel = ref<TmdbMedia[]>([]);
+const moviesHeader = ref<TmdbMedia[]>([]);
 
 onMounted(() => getTrendingMovies());
 
@@ -39,35 +39,10 @@ async function getTrendingMovies() {
 
   if (!data || error) return;
 
-  moviesHeader.value = data.results
-    .slice(0, 7)
-    .map((m) => mappedMoviesResult(m));
+  const mapper = useUtils().mappers.movie;
 
-  moviesCarousel.value = data.results
-    .slice(7)
-    .map((m) => mappedMoviesResult(m));
-}
-
-function mappedMoviesResult(item: TmdbMovie): TProject {
-  return {
-    id: String(item.id),
-    name: item.title,
-    description: item.overview,
-    status: EStatusProject.EXERCIES,
-    level: ELevelProject.MEDIUM,
-    duration: item.release_date,
-    tech: [],
-    picture: {
-      src_s: `https://image.tmdb.org/t/p/w200${item.poster_path}`,
-      src_m: `https://image.tmdb.org/t/p/w500${item.poster_path}`,
-      src_l: [
-        `https://image.tmdb.org/t/p/w1280${item.backdrop_path}`,
-        `https://image.tmdb.org/t/p/original${item.backdrop_path}`,
-      ],
-      alt: item.title,
-    },
-    links: {},
-  };
+  moviesHeader.value = data.results.slice(0, 7).map(mapper);
+  moviesCarousel.value = data.results.slice(7).map(mapper);
 }
 </script>
 
@@ -75,7 +50,7 @@ function mappedMoviesResult(item: TmdbMovie): TProject {
 .home {
   &__content {
     position: relative;
-    margin-top: -10vh;
+    margin-top: -5vh;
     z-index: 9;
     .test {
       display: flex;

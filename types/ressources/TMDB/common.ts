@@ -62,3 +62,29 @@ export type TmdbCredits = {
   cast: TmdbCastMember[]
   crew: TmdbCrewMember[]
 }
+
+export type TmdbMediaType = 'movie' | 'tv'
+
+export type TmdbMedia = {
+  id: number
+  mediaType: TmdbMediaType
+
+  name: string
+  originalName: string  
+  overview: string
+  tagline?: string
+
+  posterPath: string | null
+  backdropPath: string | null
+
+  releaseDate: string   
+  voteAverage: number
+  voteCount: number
+  popularity: number
+  genres: TmdbGenre[]
+  genreIds?: number[] 
+
+  runtime?: number
+  status?: string
+  homepage?: string
+}

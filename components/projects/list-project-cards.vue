@@ -1,36 +1,37 @@
 <template>
   <ul class="list-project-cards">
-    <li v-for="(project, index) in projects" :key="index">
+    <li v-for="(media, index) in medias" :key="media.id">
       <project-card
-        :picture="project.picture"
-        :id="project.id"
+        :media="media"
+        :href="`${baseRoute}/${media.id}`"
         :is-hovered="hoveredIndex === index"
-        @hover="whileHovering(index, project.id)"
+        @hover="whileHovering(index, media.id)"
         @leave="onLeave"
-        @click="emit('open-modal', project.id)"
+        @click="emit('open-modal', media.id)"
       />
     </li>
   </ul>
 </template>
 
 <script setup lang="ts">
-import type { TProject } from "~/types/type/project";
+import type { TmdbMedia } from "~/types/ressources/TMDB/common";
 
 const emit = defineEmits(["focused-project", "open-modal"]);
 
 defineProps({
-  projects: { type: Array as PropType<TProject[]>, required: true },
+  medias: { type: Array as PropType<TmdbMedia[]>, required: true },
+  baseRoute: { type: String, default: "/" },
 });
 
 const hoveredIndex = ref<number | null>(null);
 let hoverTimeout: ReturnType<typeof setTimeout> | null = null;
 
-function whileHovering(index: number, projectId: string) {
+function whileHovering(index: number, mediaId: number) {
   if (hoverTimeout) clearTimeout(hoverTimeout);
 
   hoverTimeout = setTimeout(() => {
     hoveredIndex.value = index;
-    emit("focused-project", projectId);
+    emit("focused-project", mediaId);
     hoverTimeout = null;
   }, 300);
 }
@@ -43,6 +44,20 @@ function onLeave() {
   hoveredIndex.value = null;
 }
 </script>
+
+<style scoped lang="scss">
+.list-project-cards {
+  display: flex;
+  width: fit-content;
+  overflow: visible;
+  &:last-child {
+    margin-right: 50px;
+  }
+  &:first-child {
+    margin-left: 50px;
+  }
+}
+</style>
 
 <style scoped lang="scss">
 .list-project-cards {
