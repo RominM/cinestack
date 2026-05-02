@@ -5,6 +5,9 @@ export default defineNuxtConfig({
     '~/assets/scss/reset.scss',
     '~/assets/scss/main.scss'
   ],
+  nitro: {
+    preset: 'netlify'
+  },
   vite: {
     css: {
       preprocessorOptions: {
