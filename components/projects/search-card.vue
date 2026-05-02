@@ -71,7 +71,7 @@ function onClick(href: string) {
 <style scoped lang="scss">
 .search-card {
   position: relative;
-  width: 160px;
+  width: 180px;
   border-radius: 14px;
   cursor: pointer;
   overflow: visible;
@@ -92,7 +92,7 @@ function onClick(href: string) {
 
   &__img {
     width: 100%;
-    height: 230px;
+    height: 280px;
     object-fit: cover;
     border-radius: 12px;
     display: block;
@@ -100,7 +100,7 @@ function onClick(href: string) {
 
   &__fallback {
     width: 100%;
-    height: 230px;
+    height: 280px;
     border-radius: 12px;
     background: #1a1a1a;
     display: flex;

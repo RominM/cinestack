@@ -4,6 +4,7 @@
       <genre-filter :genres="genres" v-model="selectedGenres" />
     </div>
 
+    <h1 style="color: #fff">Les Films</h1>
     <div class="films__grid">
       <search-card
         v-for="movie in movies"
@@ -83,7 +84,7 @@ onMounted(async () => {
     (entries) => {
       if (entries[0].isIntersecting) fetchMovies();
     },
-    { threshold: 0.1 },
+    { threshold: 0.2 },
   );
 
   if (sentinel.value) observer.observe(sentinel.value);

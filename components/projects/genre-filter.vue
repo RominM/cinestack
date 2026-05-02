@@ -37,7 +37,7 @@ function toggle(id: number) {
 <style scoped lang="scss">
 .genre-filter {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 8px;
 
   &__btn {

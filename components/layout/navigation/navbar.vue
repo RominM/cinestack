@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar">
-    <nuxt-link to="/" class="logo">
+    <nuxt-link to="/" class="logo" title="Accueil CineStack">
       <logo />
     </nuxt-link>
 
@@ -12,6 +12,7 @@
       >
         <nuxt-link
           :to="route.path"
+          :title="route.name"
           class="navbar__nav-list__el__link"
           :class="{
             'navbar__nav-list__el__link--active': currentRoute.path.startsWith(

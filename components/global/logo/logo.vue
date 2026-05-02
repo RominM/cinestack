@@ -6,11 +6,6 @@
       role="img"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <title>CineStack logo</title>
-      <desc>
-        Logo CineStack — trait vertical rouge, texte empilé PascalCase
-      </desc>
-
       <rect
         x="0"
         y="0"

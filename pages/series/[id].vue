@@ -1,17 +1,18 @@
 <template>
-  <div class="projects">
+  <div class="series-id">
     <maintenance-page />
   </div>
 </template>
 
 <script setup lang="ts">
 definePageMeta({
-  key: "home",
+  key: "series",
   layout: "main-layout",
-  order: 1,
+  order: 3,
 });
-
-useHead({ title: "Tendences" });
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.series-id {
+}
+</style>
