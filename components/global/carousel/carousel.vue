@@ -13,19 +13,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-
 const container = ref<HTMLElement | null>(null);
-const scrollAmount = 350;
+
+const getScrollAmount = () => {
+  return container.value ? container.value.clientWidth * 0.8 : 350;
+};
 
 const prev = () => {
-  if (container.value)
-    container.value.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+  container.value?.scrollBy({ left: -getScrollAmount(), behavior: "smooth" });
 };
 
 const next = () => {
-  if (container.value)
-    container.value.scrollBy({ left: scrollAmount, behavior: "smooth" });
+  container.value?.scrollBy({ left: getScrollAmount(), behavior: "smooth" });
 };
 </script>
 
@@ -33,14 +32,12 @@ const next = () => {
 .carousel-wrapper {
   position: relative;
   width: 100%;
-  height: fit-content;
-  overflow: visible;
+  overflow: hidden; // clip les flèches proprement
 }
 
 .carousel-container {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 0;
   padding: 155px 80px;
   overflow-x: auto;
@@ -48,9 +45,7 @@ const next = () => {
   scroll-behavior: smooth;
   -ms-overflow-style: none;
   scrollbar-width: none;
-  :deep(> *:first-child) {
-    margin-left: 110%;
-  }
+
   &::-webkit-scrollbar {
     display: none;
   }
@@ -64,22 +59,33 @@ const next = () => {
   min-height: 120px;
   padding: 0 12px;
   font-size: 2rem;
-  background-color: #ffffff1c;
-  color: #ebebebcb;
+  background-color: #0000001c;
+  color: #f7f7f7cb;
   border-radius: 4px;
   cursor: pointer;
   user-select: none;
   transition: 0.3s;
   z-index: 9999;
+
   &:hover {
-    color: #000;
-    background-color: #d8d8d84f;
+    color: #111111f3;
+    background-color: #3b3b3bbd;
+  }
+
+  &.left {
+    left: 0;
+  }
+  &.right {
+    right: 0;
   }
 }
-.arrow.left {
-  left: 0;
-}
-.arrow.right {
-  right: 0;
+
+@media screen and (max-width: 768px) {
+  .carousel-container {
+    padding: 20px;
+  }
+  .arrow {
+    display: none;
+  }
 }
 </style>

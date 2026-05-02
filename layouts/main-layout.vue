@@ -4,6 +4,8 @@
       <navbar />
     </glass-bento>
 
+    <search-overlay />
+
     <div class="main-layout__content">
       <slot />
     </div>

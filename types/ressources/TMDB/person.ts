@@ -3,6 +3,7 @@ import type { TmdbTV } from './tv'
 
 export type TmdbPerson = {
   id: number
+  media_type: 'person'
   name: string
   profile_path: string | null
   popularity: number

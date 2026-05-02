@@ -8,13 +8,19 @@
           v-if="moviesCarousel.length"
           :medias="moviesCarousel"
           base-route="/films"
-          title="Tendences"
+          title="Tendances"
         />
         <section-cards
-          v-if="moviesCarousel.length"
-          :medias="moviesCarousel"
+          v-if="popularMovies.length"
+          :medias="popularMovies"
           base-route="/films"
-          title="Tendences"
+          title="Films populaires"
+        />
+        <section-cards
+          v-if="popularTV.length"
+          :medias="popularTV"
+          base-route="/series"
+          title="Séries populaires"
         />
       </div>
     </div>
@@ -32,24 +38,42 @@ definePageMeta({
   order: 0,
 });
 
-const isLoading = ref<boolean>(false);
-const moviesCarousel = ref<TmdbMedia[]>([]);
+useHead({ title: "Accueil" });
+
+const isLoading = ref(false);
 const moviesHeader = ref<TmdbMedia[]>([]);
+const moviesCarousel = ref<TmdbMedia[]>([]);
+const popularMovies = ref<TmdbMedia[]>([]);
+const popularTV = ref<TmdbMedia[]>([]);
 
-onMounted(() => getTrendingMovies());
+onMounted(() => fetchAll());
 
-async function getTrendingMovies() {
+async function fetchAll() {
   isLoading.value = true;
-  const { data, error } =
-    await useAPI().tmdb.trending.getTrendingMoviesByWeek();
+
+  const [trending, movies, tv] = await Promise.all([
+    useAPI().tmdb.trending.getTrendingMoviesByWeek(),
+    useAPI().tmdb.movie.getPopular(),
+    useAPI().tmdb.tv.getPopular(),
+  ]);
+
   isLoading.value = false;
 
-  if (!data || error) return;
+  const mapMovie = useUtils().mappers.movie;
+  const mapTV = useUtils().mappers.tv;
 
-  const mapper = useUtils().mappers.movie;
+  if (trending.data) {
+    moviesHeader.value = trending.data.results.slice(0, 7).map(mapMovie);
+    moviesCarousel.value = trending.data.results.slice(7).map(mapMovie);
+  }
 
-  moviesHeader.value = data.results.slice(0, 7).map(mapper);
-  moviesCarousel.value = data.results.slice(7).map(mapper);
+  if (movies.data) {
+    popularMovies.value = movies.data.results.map(mapMovie);
+  }
+
+  if (tv.data) {
+    popularTV.value = tv.data.results.map(mapTV);
+  }
 }
 </script>
 

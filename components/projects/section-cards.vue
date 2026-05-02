@@ -21,12 +21,18 @@ defineProps({
 .section-cards {
   display: flex;
   flex-direction: column;
+  margin-bottom: -110px;
   &__title {
     position: relative;
     padding-left: 20px;
     margin-bottom: -140px;
-    width: 150px;
+    width: fit-content;
     color: #fff;
+  }
+}
+@media screen and (max-width: 768px) {
+  .section-cards__title {
+    margin-bottom: 0px;
   }
 }
 </style>

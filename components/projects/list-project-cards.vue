@@ -1,10 +1,11 @@
 <template>
   <ul class="list-project-cards">
-    <li v-for="(media, index) in visibleMedias" :key="media.id">
+    <li v-for="(media, index) in medias" :key="media.id">
       <project-card
         :media="media"
         :href="`${baseRoute}/${media.id}`"
         :is-hovered="hoveredIndex === index"
+        :title="media.name"
         @hover="whileHovering(index, media.id)"
         @leave="onLeave"
         @click="emit('open-modal', media.id)"
@@ -24,7 +25,6 @@ const props = defineProps({
 });
 
 const hoveredIndex = ref<number | null>(null);
-const visibleMedias = computed(() => props.medias.slice(0, 13));
 
 let hoverTimeout: ReturnType<typeof setTimeout> | null = null;
 
@@ -52,11 +52,5 @@ function onLeave() {
   display: flex;
   width: fit-content;
   overflow: visible;
-  &:last-child {
-    margin-right: 150px;
-  }
-  &:first-child {
-    margin-left: 50px;
-  }
 }
 </style>

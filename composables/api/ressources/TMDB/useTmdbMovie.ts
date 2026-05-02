@@ -43,5 +43,10 @@ export const useTmdbMovie = () => {
       if (!data || error) return { data, error }
       return { data, error }
     },
+
+    getPopular: async (params?: Record<string, string>): TmdbRequestResult<TmdbPagedResponse<TmdbMovie>> => {
+      const { data, error } = await get<TmdbPagedResponse<TmdbMovie>>(`${path}/popular`, { params })
+      return { data, error }
+    },
   }
 }

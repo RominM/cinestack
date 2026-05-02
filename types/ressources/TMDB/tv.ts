@@ -2,6 +2,7 @@ import type { TmdbGenre } from './common'
 
 export type TmdbTV = {
   id: number
+  media_type: 'tv'
   name: string
   overview: string
   first_air_date: string

@@ -10,13 +10,14 @@
     </span>
 
     <nuxt-link :to="`/films/${media.id}`" class="hero-content__action">
-      Découvrir
+      <span class="hero-content__action--text"> Découvrir </span>
+      <h-icon class="hero-content__action--icon" :icon="Share05Icon" />
     </nuxt-link>
   </div>
 </template>
 
 <script setup lang="ts">
-import { StarIcon } from "@hugeicons/core-free-icons";
+import { Share05Icon, StarIcon } from "@hugeicons/core-free-icons";
 import type { TmdbMedia } from "~/types/ressources/TMDB/common";
 
 defineProps({
@@ -36,7 +37,9 @@ defineProps({
   color: #fff;
   z-index: 999;
   &__title {
-    font-size: 52px;
+    max-width: 70%;
+    font-size: clamp(26px, 2.5vw + 16px, 52px);
+    line-height: clamp(26px, 2.5vw + 16px, 52px);
   }
 
   &__overview {
@@ -73,6 +76,44 @@ defineProps({
     font-size: 14px;
     font-weight: 600;
     color: #000;
+    &--icon {
+      display: none;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .hero-content {
+    bottom: 16px;
+    left: 16px;
+    height: 100%;
+    justify-content: flex-end;
+    gap: 8px;
+    padding-bottom: 30px;
+    &__overview {
+      max-width: 90%;
+      font-size: 12px;
+    }
+    &__dotes {
+      bottom: -20px;
+    }
+    &__average {
+      font-size: 12px;
+    }
+    &__action {
+      position: absolute;
+      top: 40px;
+      right: 20px;
+      width: fit-content;
+      height: fit-content;
+      padding: 8px;
+      &--text {
+        display: none;
+      }
+      &--icon {
+        display: block;
+      }
+    }
   }
 }
 </style>

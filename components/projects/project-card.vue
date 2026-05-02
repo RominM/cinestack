@@ -13,20 +13,17 @@
         backgroundImage: `url(https://image.tmdb.org/t/p/w500${media.posterPath})`,
       }"
     />
-
     <img
-      ref="imgRef"
       class="project-card__img"
       :src="`https://image.tmdb.org/t/p/w500${media.posterPath}`"
       :alt="media.name"
     />
-
     <div class="project-card__shine" :style="shineStyle" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
+import { useCardTilt } from "~/composables/global/card/useCardTilt";
 import type { TmdbMedia } from "~/types/ressources/TMDB/common";
 
 const props = defineProps({
@@ -36,51 +33,23 @@ const props = defineProps({
 });
 
 const router = useRouter();
-
 const emit = defineEmits(["hover", "leave"]);
-
-const cardRef = ref<HTMLElement | null>(null);
-const tiltX = ref(0);
-const tiltY = ref(0);
-const mouseX = ref(50);
-const mouseY = ref(50);
-
-const shineStyle = computed(() => ({
-  background: `radial-gradient(circle at ${mouseX.value}% ${mouseY.value}%, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0) 38%)`,
-}));
+const { cardRef, shineStyle, onMouseMove, resetTilt } = useCardTilt();
 
 watch(
   () => props.isHovered,
   (val) => {
     if (!cardRef.value) return;
     if (val) {
-      cardRef.value.style.transform = `perspective(800px) rotateX(${tiltX.value}deg) rotateY(${tiltY.value}deg) scale(1.2) translateY(-20px)`;
+      cardRef.value.style.transform = `perspective(800px) rotateX(0deg) rotateY(0deg) scale(1.2) translateY(-20px)`;
     } else {
       cardRef.value.style.transform = "";
     }
   },
 );
 
-function onMouseMove(e: MouseEvent) {
-  const el = e.currentTarget as HTMLElement;
-  const rect = el.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
-  const cx = rect.width / 2;
-  const cy = rect.height / 2;
-
-  tiltX.value = -((y - cy) / cy) * 12;
-  tiltY.value = ((x - cx) / cx) * 18;
-  mouseX.value = (x / rect.width) * 100;
-  mouseY.value = (y / rect.height) * 100;
-
-  if (!props.isHovered) return;
-  el.style.transform = `perspective(800px) rotateX(${tiltX.value}deg) rotateY(${tiltY.value}deg) scale(1.2) translateY(-20px)`;
-}
-
 function onLeave(e: MouseEvent) {
-  const el = e.currentTarget as HTMLElement;
-  el.style.transform = "";
+  resetTilt();
   emit("leave");
 }
 </script>

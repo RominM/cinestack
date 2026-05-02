@@ -1,26 +1,33 @@
-import type { TmdbPagedResponse } from '~/types/ressources/TMDB/common'
+import type { TmdbPagedResponse, TmdbRequestResult } from '~/types/ressources/TMDB/common'
 import type { TmdbMovie } from '~/types/ressources/TMDB/movie'
 import type { TmdbTV } from '~/types/ressources/TMDB/tv'
 import type { TmdbPerson } from '~/types/ressources/TMDB/person'
 import { useRequest } from '../../useRequest'
+import { BASE_TMDB_PATH } from '~/const/tmdb'
 
 export const useTmdbSearch = () => {
   const { get } = useRequest()
-
-  const fetch = <T>(endpoint: string, params?: Record<string, string>) =>
-    get<T>(`/tmdb${endpoint}`, { params })
+  const path = `${BASE_TMDB_PATH}/search`
 
   return {
-    searchMovies: (query: string, params?: Record<string, string>) =>
-      fetch<TmdbPagedResponse<TmdbMovie>>('/search/movie', { query, ...params }),
+    searchMovies: async (query: string, params?: Record<string, string>): TmdbRequestResult<TmdbPagedResponse<TmdbMovie>> => {
+      const { data, error } = await get<TmdbPagedResponse<TmdbMovie>>(`${path}/movie`, { params: { query, ...params } })
+      return { data, error }
+    },
 
-    searchTV: (query: string, params?: Record<string, string>) =>
-      fetch<TmdbPagedResponse<TmdbTV>>('/search/tv', { query, ...params }),
+    searchTV: async (query: string, params?: Record<string, string>): TmdbRequestResult<TmdbPagedResponse<TmdbTV>> => {
+      const { data, error } = await get<TmdbPagedResponse<TmdbTV>>(`${path}/tv`, { params: { query, ...params } })
+      return { data, error }
+    },
 
-    searchPeople: (query: string, params?: Record<string, string>) =>
-      fetch<TmdbPagedResponse<TmdbPerson>>('/search/person', { query, ...params }),
+    searchPeople: async (query: string, params?: Record<string, string>): TmdbRequestResult<TmdbPagedResponse<TmdbPerson>> => {
+      const { data, error } = await get<TmdbPagedResponse<TmdbPerson>>(`${path}/person`, { params: { query, ...params } })
+      return { data, error }
+    },
 
-    searchMulti: (query: string, params?: Record<string, string>) =>
-      fetch<TmdbPagedResponse<TmdbMovie | TmdbTV | TmdbPerson>>('/search/multi', { query, ...params }),
+    searchMulti: async (query: string, params?: Record<string, string>): TmdbRequestResult<TmdbPagedResponse<TmdbMovie | TmdbTV | TmdbPerson>> => {
+      const { data, error } = await get<TmdbPagedResponse<TmdbMovie | TmdbTV | TmdbPerson>>(`${path}/multi`, { params: { query, ...params } })
+      return { data, error }
+    },
   }
 }

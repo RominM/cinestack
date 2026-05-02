@@ -8,6 +8,8 @@ definePageMeta({
   layout: "main-layout",
   order: 3,
 });
+
+useHead({ title: "Series" });
 </script>
 
 <style lang="scss" scoped>

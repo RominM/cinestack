@@ -7,6 +7,7 @@
         class="hero-header__slide"
       >
         <img
+          v-if="item.backdropPath"
           :src="`https://image.tmdb.org/t/p/original${item.backdropPath}`"
           :alt="item.name"
           :style="
@@ -15,6 +16,11 @@
               : {}
           "
         />
+        <div v-else class="hero-header__slide__fallback">
+          <h-icon :icon="CameraVideoIcon" color="#fff" :size="120" />
+          <span style="color: #fff">{{ item.name }}</span>
+        </div>
+
         <div class="hero-header__slide__gradient" />
         <hero-content v-if="showContent" :media="item" />
       </div>
@@ -32,6 +38,7 @@
 </template>
 
 <script setup lang="ts">
+import { CameraVideoIcon } from "@hugeicons/core-free-icons";
 import type { TmdbMedia } from "~/types/ressources/TMDB/common";
 
 const props = defineProps({
@@ -106,6 +113,14 @@ watch(
       object-fit: cover;
       object-position: center top;
     }
+    &__fallback {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      height: 100%;
+    }
     &__gradient {
       position: absolute;
       bottom: 0;
@@ -143,6 +158,12 @@ watch(
         transform: scale(1.3);
       }
     }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .hero-header {
+    height: 40vh;
   }
 }
 </style>

@@ -1,6 +1,8 @@
 <template>
   <nav class="navbar">
-    <nuxt-link to="/" class="navbar__nav-list__el__link"> logo </nuxt-link>
+    <nuxt-link to="/" class="logo">
+      <logo />
+    </nuxt-link>
 
     <ul class="navbar__nav-list">
       <li
@@ -8,7 +10,15 @@
         :key="route?.name"
         class="navbar__nav-list__el"
       >
-        <nuxt-link :to="route.path" class="navbar__nav-list__el__link">
+        <nuxt-link
+          :to="route.path"
+          class="navbar__nav-list__el__link"
+          :class="{
+            'navbar__nav-list__el__link--active': currentRoute.path.startsWith(
+              route.path,
+            ),
+          }"
+        >
           {{ route.name }}
         </nuxt-link>
       </li>
@@ -23,6 +33,7 @@ import { useUtils } from "~/composables/global/useUtils";
 import { ERoute } from "~/types/enum/global/navigation";
 
 const userRoutes = useUtils().routes.excludes([ERoute.PRIVATE]);
+const currentRoute = useRoute();
 
 const sortedRoutes = computed(() =>
   [...userRoutes]
@@ -35,10 +46,14 @@ const sortedRoutes = computed(() =>
 .navbar {
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  gap: 10px;
+  justify-content: space-between;
+  padding: 0 4rem;
   height: 62px;
+
   &__nav-list {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     align-items: center;
     display: flex;
     gap: 2rem;
@@ -49,17 +64,44 @@ const sortedRoutes = computed(() =>
     width: fit-content;
     color: #ffffff60;
     text-transform: capitalize;
+
     &__el {
       text-align: center;
       &__link {
-        border: solid 1px #ffffff4d;
-        padding: 4px 18px;
-        border-radius: 48px;
-        transition: 0.3s;
-        &:hover,
-        &.router-link-active {
-          color: #fffffff6;
-          border: solid 1px #fffffff6;
+        color: #ffffff50;
+        font-size: 13px;
+        padding: 5px 16px;
+        border-radius: 6px;
+        text-decoration: none;
+        transition: 0.2s;
+        letter-spacing: 0.3px;
+        position: relative;
+
+        &::after {
+          content: "";
+          position: absolute;
+          bottom: -2px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 0;
+          height: 2px;
+          background: rgba(163, 0, 0, 0.85);
+          border-radius: 1px;
+          transition: 0.2s;
+        }
+
+        &:hover {
+          color: #fff;
+          background: rgba(255, 255, 255, 0.06);
+        }
+
+        &--active {
+          color: #fff;
+          background: transparent;
+
+          &::after {
+            width: 50%;
+          }
         }
       }
     }

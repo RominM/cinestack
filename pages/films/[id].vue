@@ -37,6 +37,10 @@ const movie = computed<TmdbMedia | undefined>(() =>
   rawMovie.value ? useUtils().mappers.movie(rawMovie.value) : undefined,
 );
 
+useHead({
+  title: () => movie.value?.name ?? "Film",
+});
+
 const recommendations = computed<TmdbMedia[]>(
   () =>
     rawMovie.value?.recommendations?.results.map(useUtils().mappers.movie) ??

@@ -10,6 +10,8 @@ definePageMeta({
   layout: "main-layout",
   order: 1,
 });
+
+useHead({ title: "Tendences" });
 </script>
 
 <style scoped lang="scss">

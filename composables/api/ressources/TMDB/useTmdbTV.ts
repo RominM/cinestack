@@ -1,36 +1,56 @@
-import type { TmdbPagedResponse, TmdbCredits, TmdbVideos, TmdbImages } from '~/types/ressources/TMDB/common'
+import type { TmdbPagedResponse, TmdbRequestResult, TmdbCredits, TmdbVideos, TmdbImages } from '~/types/ressources/TMDB/common'
 import type { TmdbTV, TmdbTVDetail, TmdbSeason, TmdbEpisode } from '~/types/ressources/TMDB/tv'
 import { useRequest } from '../../useRequest'
+import { BASE_TMDB_PATH } from '~/const/tmdb'
 
 export const useTmdbTV = () => {
   const { get } = useRequest()
-
-  const fetch = <T>(endpoint: string, params?: Record<string, string>) =>
-    get<T>(`/tmdb${endpoint}`, { params })
+  const path = `${BASE_TMDB_PATH}/tv`
 
   return {
-    getTVDetail: (id: number | string) =>
-      fetch<TmdbTVDetail>(`/tv/${id}`),
+    getPopular: async (params?: Record<string, string>): TmdbRequestResult<TmdbPagedResponse<TmdbTV>> => {
+      const { data, error } = await get<TmdbPagedResponse<TmdbTV>>(`${path}/popular`, { params })
+      return { data, error }
+    },
 
-    getTVCredits: (id: number | string) =>
-      fetch<TmdbCredits>(`/tv/${id}/credits`),
+    getTVDetail: async (id: number | string, params?: Record<string, string>): TmdbRequestResult<TmdbTVDetail> => {
+      const { data, error } = await get<TmdbTVDetail>(`${path}/${id}`, { params })
+      return { data, error }
+    },
 
-    getTVVideos: (id: number | string) =>
-      fetch<TmdbVideos>(`/tv/${id}/videos`),
+    getTVCredits: async (id: number | string): TmdbRequestResult<TmdbCredits> => {
+      const { data, error } = await get<TmdbCredits>(`${path}/${id}/credits`)
+      return { data, error }
+    },
 
-    getTVImages: (id: number | string) =>
-      fetch<TmdbImages>(`/tv/${id}/images`),
+    getTVVideos: async (id: number | string): TmdbRequestResult<TmdbVideos> => {
+      const { data, error } = await get<TmdbVideos>(`${path}/${id}/videos`)
+      return { data, error }
+    },
 
-    getTVSeason: (id: number | string, season: number) =>
-      fetch<TmdbSeason>(`/tv/${id}/season/${season}`),
+    getTVImages: async (id: number | string): TmdbRequestResult<TmdbImages> => {
+      const { data, error } = await get<TmdbImages>(`${path}/${id}/images`)
+      return { data, error }
+    },
 
-    getTVEpisode: (id: number | string, season: number, episode: number) =>
-      fetch<TmdbEpisode>(`/tv/${id}/season/${season}/episode/${episode}`),
+    getTVSeason: async (id: number | string, season: number): TmdbRequestResult<TmdbSeason> => {
+      const { data, error } = await get<TmdbSeason>(`${path}/${id}/season/${season}`)
+      return { data, error }
+    },
 
-    getTVSimilar: (id: number | string, params?: Record<string, string>) =>
-      fetch<TmdbPagedResponse<TmdbTV>>(`/tv/${id}/similar`, params),
+    getTVEpisode: async (id: number | string, season: number, episode: number): TmdbRequestResult<TmdbEpisode> => {
+      const { data, error } = await get<TmdbEpisode>(`${path}/${id}/season/${season}/episode/${episode}`)
+      return { data, error }
+    },
 
-    getTVRecommendations: (id: number | string, params?: Record<string, string>) =>
-      fetch<TmdbPagedResponse<TmdbTV>>(`/tv/${id}/recommendations`, params),
+    getTVSimilar: async (id: number | string, params?: Record<string, string>): TmdbRequestResult<TmdbPagedResponse<TmdbTV>> => {
+      const { data, error } = await get<TmdbPagedResponse<TmdbTV>>(`${path}/${id}/similar`, { params })
+      return { data, error }
+    },
+
+    getTVRecommendations: async (id: number | string, params?: Record<string, string>): TmdbRequestResult<TmdbPagedResponse<TmdbTV>> => {
+      const { data, error } = await get<TmdbPagedResponse<TmdbTV>>(`${path}/${id}/recommendations`, { params })
+      return { data, error }
+    },
   }
 }

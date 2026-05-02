@@ -2,6 +2,7 @@ import type { TmdbCredits, TmdbGenre, TmdbImages, TmdbPagedResponse, TmdbVideos 
 
 export type TmdbMovie = {
   id: number
+  media_type: 'movie'
   title: string
   overview: string
   release_date: string
