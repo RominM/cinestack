@@ -1,19 +1,22 @@
-import type { TmdbGenre } from '~/types/ressources/TMDB/common'
+import type { TmdbGenre, TmdbRequestResult } from '~/types/ressources/TMDB/common'
 import { useRequest } from '../../useRequest'
+import { BASE_TMDB_PATH } from '~/const/tmdb'
 
 type TmdbGenreList = { genres: TmdbGenre[] }
 
 export const useTmdbGenre = () => {
   const { get } = useRequest()
-
-  const fetch = <T>(endpoint: string) =>
-    get<T>(`/tmdb${endpoint}`)
+  const path = BASE_TMDB_PATH
 
   return {
-    getMovieGenres: () =>
-      fetch<TmdbGenreList>('/genre/movie/list'),
+    getMovieGenres: async (): TmdbRequestResult<TmdbGenreList> => {
+      const { data, error } = await get<TmdbGenreList>(`${path}/genre/movie/list`)
+      return { data, error }
+    },
 
-    getTVGenres: () =>
-      fetch<TmdbGenreList>('/genre/tv/list'),
+    getTVGenres: async (): TmdbRequestResult<TmdbGenreList> => {
+      const { data, error } = await get<TmdbGenreList>(`${path}/genre/tv/list`)
+      return { data, error }
+    },
   }
 }

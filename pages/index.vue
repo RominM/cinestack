@@ -14,7 +14,7 @@
           v-if="popularMovies.length"
           :medias="popularMovies"
           base-route="/films"
-          title="Films populaires"
+          title="à ne pas manquer"
         />
         <section-cards
           v-if="popularTV.length"

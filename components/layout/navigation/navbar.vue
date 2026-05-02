@@ -69,7 +69,7 @@ const sortedRoutes = computed(() =>
       text-align: center;
       &__link {
         color: #ffffff50;
-        font-size: 13px;
+        font-size: 16px;
         padding: 5px 16px;
         border-radius: 6px;
         text-decoration: none;
@@ -85,7 +85,7 @@ const sortedRoutes = computed(() =>
           transform: translateX(-50%);
           width: 0;
           height: 2px;
-          background: rgba(163, 0, 0, 0.85);
+          background: $secondary;
           border-radius: 1px;
           transition: 0.2s;
         }

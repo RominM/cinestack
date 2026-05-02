@@ -16,7 +16,7 @@ export const useSearchStore = defineStore('search', () => {
     tv: results.value.filter((r): r is TmdbTV => r.media_type === 'tv'),
     people: results.value.filter((r): r is TmdbPerson => r.media_type === 'person'),
   }))
- 
+
   const close = () => {
     isOpen.value = false
   }
@@ -28,6 +28,12 @@ export const useSearchStore = defineStore('search', () => {
     results.value = []
   }
 
+  watch(isOpen, (val) => {
+    if (import.meta.client) {
+      document.body.style.overflow = val ? 'hidden' : ''
+    }
+  })
+  
   return {
     query,
     isOpen,

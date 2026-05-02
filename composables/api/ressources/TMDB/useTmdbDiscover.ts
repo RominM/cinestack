@@ -1,37 +1,52 @@
-import type { TmdbPagedResponse } from '~/types/ressources/TMDB/common'
+import type { TmdbPagedResponse, TmdbRequestResult } from '~/types/ressources/TMDB/common'
 import type { TmdbMovie } from '~/types/ressources/TMDB/movie'
 import type { TmdbTV } from '~/types/ressources/TMDB/tv'
 import { useRequest } from '../../useRequest'
+import { BASE_TMDB_PATH } from '~/const/tmdb'
 
 export const useTmdbDiscover = () => {
   const { get } = useRequest()
-
-  const fetch = <T>(endpoint: string, params?: Record<string, string>) =>
-    get<T>(`/tmdb${endpoint}`, { params })
+  const path = BASE_TMDB_PATH
 
   return {
-    discoverMovies: (params?: Record<string, string>) =>
-      fetch<TmdbPagedResponse<TmdbMovie>>('/discover/movie', params),
+    discoverMovies: async (params?: Record<string, string>): TmdbRequestResult<TmdbPagedResponse<TmdbMovie>> => {
+      const { data, error } = await get<TmdbPagedResponse<TmdbMovie>>(`${path}/discover/movie`, { params })
+      return { data, error }
+    },
 
-    discoverTV: (params?: Record<string, string>) =>
-      fetch<TmdbPagedResponse<TmdbTV>>('/discover/tv', params),
+    discoverTV: async (params?: Record<string, string>): TmdbRequestResult<TmdbPagedResponse<TmdbTV>> => {
+      const { data, error } = await get<TmdbPagedResponse<TmdbTV>>(`${path}/discover/tv`, { params })
+      return { data, error }
+    },
 
-    getTopRatedMovies: (params?: Record<string, string>) =>
-      fetch<TmdbPagedResponse<TmdbMovie>>('/movie/top_rated', params),
+    getTopRatedMovies: async (params?: Record<string, string>): TmdbRequestResult<TmdbPagedResponse<TmdbMovie>> => {
+      const { data, error } = await get<TmdbPagedResponse<TmdbMovie>>(`${path}/movie/top_rated`, { params })
+      return { data, error }
+    },
 
-    getTopRatedTV: (params?: Record<string, string>) =>
-      fetch<TmdbPagedResponse<TmdbTV>>('/tv/top_rated', params),
+    getTopRatedTV: async (params?: Record<string, string>): TmdbRequestResult<TmdbPagedResponse<TmdbTV>> => {
+      const { data, error } = await get<TmdbPagedResponse<TmdbTV>>(`${path}/tv/top_rated`, { params })
+      return { data, error }
+    },
 
-    getNowPlayingMovies: (params?: Record<string, string>) =>
-      fetch<TmdbPagedResponse<TmdbMovie>>('/movie/now_playing', params),
+    getNowPlayingMovies: async (params?: Record<string, string>): TmdbRequestResult<TmdbPagedResponse<TmdbMovie>> => {
+      const { data, error } = await get<TmdbPagedResponse<TmdbMovie>>(`${path}/movie/now_playing`, { params })
+      return { data, error }
+    },
 
-    getUpcomingMovies: (params?: Record<string, string>) =>
-      fetch<TmdbPagedResponse<TmdbMovie>>('/movie/upcoming', params),
+    getUpcomingMovies: async (params?: Record<string, string>): TmdbRequestResult<TmdbPagedResponse<TmdbMovie>> => {
+      const { data, error } = await get<TmdbPagedResponse<TmdbMovie>>(`${path}/movie/upcoming`, { params })
+      return { data, error }
+    },
 
-    getPopularMovies: (params?: Record<string, string>) =>
-      fetch<TmdbPagedResponse<TmdbMovie>>('/movie/popular', params),
+    getPopularMovies: async (params?: Record<string, string>): TmdbRequestResult<TmdbPagedResponse<TmdbMovie>> => {
+      const { data, error } = await get<TmdbPagedResponse<TmdbMovie>>(`${path}/movie/popular`, { params })
+      return { data, error }
+    },
 
-    getPopularTV: (params?: Record<string, string>) =>
-      fetch<TmdbPagedResponse<TmdbTV>>('/tv/popular', params),
+    getPopularTV: async (params?: Record<string, string>): TmdbRequestResult<TmdbPagedResponse<TmdbTV>> => {
+      const { data, error } = await get<TmdbPagedResponse<TmdbTV>>(`${path}/tv/popular`, { params })
+      return { data, error }
+    },
   }
 }

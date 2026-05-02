@@ -48,5 +48,15 @@ export const useTmdbMovie = () => {
       const { data, error } = await get<TmdbPagedResponse<TmdbMovie>>(`${path}/popular`, { params })
       return { data, error }
     },
+    
+    getNowPlaying: async (params?: Record<string, string>): TmdbRequestResult<TmdbPagedResponse<TmdbMovie>> => {
+      const { data, error } = await get<TmdbPagedResponse<TmdbMovie>>(`${path}/now_playing`, { params })
+      return { data, error }
+    },
+
+    getUpcoming: async (params?: Record<string, string>): TmdbRequestResult<TmdbPagedResponse<TmdbMovie>> => {
+      const { data, error } = await get<TmdbPagedResponse<TmdbMovie>>(`${path}/upcoming`, { params })
+      return { data, error }
+    },
   }
 }

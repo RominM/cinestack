@@ -8,6 +8,7 @@
 
     <div class="main-layout__content">
       <slot />
+      <footer-bar />
     </div>
   </div>
 </template>

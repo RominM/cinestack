@@ -6,7 +6,7 @@
     </p>
     <span class="hero-content__average">
       {{ media.voteAverage.toFixed(1) }}
-      <h-icon :icon="StarIcon" color="#FFC107" size="16px" />
+      <span class="hero-content__average__star"> ★ </span>
     </span>
 
     <nuxt-link :to="`/films/${media.id}`" class="hero-content__action">
@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { Share05Icon, StarIcon } from "@hugeicons/core-free-icons";
+import { Share05Icon } from "@hugeicons/core-free-icons";
 import type { TmdbMedia } from "~/types/ressources/TMDB/common";
 
 defineProps({
@@ -62,6 +62,9 @@ defineProps({
     border-radius: 4px;
     width: fit-content;
     background-color: #ffffff34;
+    &__star {
+      color: #f5c518;
+    }
   }
 
   &__action {
