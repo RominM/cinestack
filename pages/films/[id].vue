@@ -4,14 +4,16 @@
   <div v-else-if="rawMovie" class="movie">
     <hero-header v-if="movie" :movies="[movie]" />
 
-    <media-details :raw="rawMovie" />
+    <div class="movie__content">
+      <media-details :raw="rawMovie" />
 
-    <section-cards
-      v-if="recommendations.length"
-      :medias="recommendations"
-      base-route="/films"
-      title="Recommandation"
-    />
+      <section-cards
+        v-if="recommendations.length"
+        :medias="recommendations"
+        base-route="/films"
+        title="Recommandation"
+      />
+    </div>
   </div>
 </template>
 
@@ -66,6 +68,12 @@ async function getMovieDetails() {
 @media screen and (max-width: 768px) {
   .movie {
     padding-bottom: 85px;
+    &__content {
+      position: relative;
+      margin-top: -70px;
+      overflow: visible;
+      z-index: 9;
+    }
   }
 }
 </style>

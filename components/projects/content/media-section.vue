@@ -19,7 +19,12 @@
         />
       </template>
       <template v-if="isLoading">
-        <div v-for="i in 3" :key="`sk-${i}`" class="media-section__skeleton" :class="{ '--landscape': variant === 'landscape' }" />
+        <div
+          v-for="i in 7"
+          :key="`sk-${i}`"
+          class="media-section__skeleton"
+          :class="{ '--landscape': variant === 'landscape' }"
+        />
       </template>
       <div ref="sentinel" class="media-section__sentinel" />
     </carousel>

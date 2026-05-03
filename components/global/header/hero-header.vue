@@ -87,7 +87,7 @@ watch(
 
 <style scoped lang="scss">
 .hero-header {
-  height: 65vh;
+  height: 70vh;
   width: 100%;
   overflow: hidden;
   position: relative;

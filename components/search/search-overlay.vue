@@ -31,7 +31,7 @@
               v-for="tv in store.resultsByType.tv"
               :key="tv.id"
               :media="useUtils().mappers.tv(tv)"
-              :href="`/tv/${tv.id}`"
+              :href="`/series/${tv.id}`"
             />
           </carousel>
         </section>

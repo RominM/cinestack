@@ -66,7 +66,7 @@ function close() {
   min-width: 50px;
   max-width: 90vw;
   min-height: 50px;
-  max-height: 90dvh;
+  max-height: 80dvh;
   padding: 10px;
   border-radius: 8px;
   background-color: $dark-surface;

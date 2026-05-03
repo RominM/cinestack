@@ -17,6 +17,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: $dark-bg;
   color: var(--text);
+  scrollbar-width: thin;
+  scrollbar-color: #ffffff20 transparent;
 }
 
 img,
