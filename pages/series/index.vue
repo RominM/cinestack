@@ -31,9 +31,11 @@ const genres = ref<TmdbGenre[]>([]);
 const selectedGenres = ref<number[]>([]);
 
 const today = new Date().toISOString().split("T")[0];
-const twoYearsAgo = new Date(Date.now() - 2 * 365 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
+const twoYearsAgo = new Date(Date.now() - 2 * 365 * 24 * 60 * 60 * 1000)
+  .toISOString()
+  .split("T")[0];
 
-function genreParam() {
+function genreParam(): Record<string, string> {
   return selectedGenres.value.length
     ? { with_genres: String(selectedGenres.value[0]) }
     : {};
@@ -49,7 +51,10 @@ const sections = [
         ...genreParam(),
       });
       if (error || !data) return null;
-      return { items: data.results.map(useUtils().mappers.tv), totalPages: data.total_pages };
+      return {
+        items: data.results.map(useUtils().mappers.tv),
+        totalPages: data.total_pages,
+      };
     },
   },
   {
@@ -62,7 +67,10 @@ const sections = [
         ...genreParam(),
       });
       if (error || !data) return null;
-      return { items: data.results.map(useUtils().mappers.tv), totalPages: data.total_pages };
+      return {
+        items: data.results.map(useUtils().mappers.tv),
+        totalPages: data.total_pages,
+      };
     },
   },
   {
@@ -77,23 +85,27 @@ const sections = [
         ...genreParam(),
       });
       if (error || !data) return null;
-      return { items: data.results.map(useUtils().mappers.tv), totalPages: data.total_pages };
+      return {
+        items: data.results.map(useUtils().mappers.tv),
+        totalPages: data.total_pages,
+      };
     },
   },
   {
     title: "Animations",
     fetchFn: async (page: number) => {
       const genreP = genreParam();
-      const withGenres = genreP.with_genres
-        ? `16,${genreP.with_genres}`
-        : "16";
+      const withGenres = genreP.with_genres ? `16,${genreP.with_genres}` : "16";
       const { data, error } = await useAPI().tmdb.discover.discoverTV({
         page: String(page),
         sort_by: "popularity.desc",
         with_genres: withGenres,
       });
       if (error || !data) return null;
-      return { items: data.results.map(useUtils().mappers.tv), totalPages: data.total_pages };
+      return {
+        items: data.results.map(useUtils().mappers.tv),
+        totalPages: data.total_pages,
+      };
     },
   },
 ];

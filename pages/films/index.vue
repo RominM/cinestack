@@ -38,7 +38,7 @@ const oneYearAgo = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000)
   .toISOString()
   .split("T")[0];
 
-function genreParam() {
+function genreParam(): Record<string, string> {
   return selectedGenres.value.length
     ? { with_genres: String(selectedGenres.value[0]) }
     : {};
