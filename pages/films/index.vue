@@ -116,12 +116,10 @@ const sections = [
     fetchFn: async (page: number) => {
       const { data, error } = await useAPI().tmdb.discover.discoverMovies({
         page: String(page),
-        sort_by: "popularity.desc",
-        "with_runtime.lte": "60",
-        "with_runtime.gte": "10",
-        "vote_count.gte": "50",
-        "release_date.gte": oneYearAgo,
-        "release_date.lte": today,
+        sort_by: "vote_count.desc",
+        "with_runtime.gte": "1",
+        "with_runtime.lte": "40",
+        "vote_count.gte": "10",
         ...genreParam(),
       });
       if (error || !data) return null;
