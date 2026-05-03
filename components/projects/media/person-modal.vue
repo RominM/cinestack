@@ -28,7 +28,9 @@
           </p>
           <p v-if="person.birthday" class="person-modal__info">
             Né(e) le {{ formatDate(person.birthday) }}
-            <span v-if="person.deathday"> · Décédé(e) le {{ formatDate(person.deathday) }}</span>
+            <span v-if="person.deathday">
+              · Décédé(e) le {{ formatDate(person.deathday) }}</span
+            >
           </p>
           <p v-if="person.place_of_birth" class="person-modal__info">
             {{ person.place_of_birth }}
@@ -36,7 +38,9 @@
         </div>
       </div>
 
-      <p v-if="person.biography" class="person-modal__bio">{{ person.biography }}</p>
+      <p v-if="person.biography" class="person-modal__bio">
+        {{ person.biography }}
+      </p>
 
       <div v-if="knownFor.length" class="person-modal__credits">
         <h4 class="person-modal__credits-title">Connu(e) pour</h4>
@@ -87,7 +91,9 @@ const knownFor = computed<TmdbMedia[]>(() =>
 
 function getHref(media: TmdbMedia) {
   const raw = credits.value.find((c) => c.id === media.id);
-  return raw?.media_type === "tv" ? `/series/${media.id}` : `/films/${media.id}`;
+  return raw?.media_type === "tv"
+    ? `/series/${media.id}`
+    : `/films/${media.id}`;
 }
 
 function formatDate(dateStr: string) {
@@ -111,9 +117,16 @@ watch(
 
     if (detailRes.data) person.value = detailRes.data;
     if (creditsRes.data) {
+      const seen = new Set<number>();
       credits.value = [...creditsRes.data.cast]
-        .filter((m) => m.poster_path)
-        .sort((a, b) => (b.popularity ?? 0) - (a.popularity ?? 0));
+        .filter((m) => {
+          if (!m.poster_path || (m.vote_count ?? 0) < 100) return false;
+          if (seen.has(m.id)) return false;
+          seen.add(m.id);
+          return true;
+        })
+        .sort((a, b) => (b.vote_count ?? 0) - (a.vote_count ?? 0))
+        .slice(0, 20);
     }
   },
 );
@@ -125,7 +138,7 @@ watch(
   flex-direction: column;
   gap: 20px;
   padding: 0 24px 24px;
-  min-width: 340px;
+  min-width: 100%;
   max-width: 560px;
 
   &__loader {
