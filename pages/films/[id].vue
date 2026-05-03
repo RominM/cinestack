@@ -42,12 +42,30 @@ const movie = computed<TmdbMedia | undefined>(() =>
 useHead({
   title: () => movie.value?.name ?? "Film",
   meta: [
-    { property: 'og:title', content: () => movie.value?.name ?? "Film" },
-    { property: 'og:description', content: () => rawMovie.value?.overview ?? "" },
-    { property: 'og:image', content: () => rawMovie.value?.backdrop_path ? `https://image.tmdb.org/t/p/w1280${rawMovie.value.backdrop_path}` : 'https://cinestack-mgl.netlify.app/cinestack.svg' },
-    { name: 'twitter:title', content: () => movie.value?.name ?? "Film" },
-    { name: 'twitter:description', content: () => rawMovie.value?.overview ?? "" },
-    { name: 'twitter:image', content: () => rawMovie.value?.backdrop_path ? `https://image.tmdb.org/t/p/w1280${rawMovie.value.backdrop_path}` : 'https://cinestack-mgl.netlify.app/cinestack.svg' },
+    { property: "og:title", content: () => movie.value?.name ?? "Film" },
+    {
+      property: "og:description",
+      content: () => rawMovie.value?.overview ?? "",
+    },
+    {
+      property: "og:image",
+      content: () =>
+        rawMovie.value?.backdrop_path
+          ? `https://image.tmdb.org/t/p/w1280${rawMovie.value.backdrop_path}`
+          : "https://cinestack-mgl.netlify.app/cinestack.svg",
+    },
+    { name: "twitter:title", content: () => movie.value?.name ?? "Film" },
+    {
+      name: "twitter:description",
+      content: () => rawMovie.value?.overview ?? "",
+    },
+    {
+      name: "twitter:image",
+      content: () =>
+        rawMovie.value?.backdrop_path
+          ? `https://image.tmdb.org/t/p/w1280${rawMovie.value.backdrop_path}`
+          : "https://cinestack-mgl.netlify.app/cinestack.svg",
+    },
   ],
 });
 
