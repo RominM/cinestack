@@ -85,4 +85,12 @@ async function fetchAll() {
     z-index: 9;
   }
 }
+
+@media screen and (max-width: 768px) {
+  .home__content {
+    display: flex;
+    flex-direction: column;
+    gap: 110px;
+  }
+}
 </style>

@@ -1,6 +1,7 @@
 <template>
   <div :class="['search-module', { isOpen: store.isOpen || isFocused }]">
     <input
+      ref="inputRef"
       class="search-module__input"
       type="text"
       :value="store.query"
@@ -27,12 +28,14 @@ const store = useSearchStore();
 const { search, clear } = useSearch();
 
 const isFocused = ref(false);
+const inputRef = ref<HTMLInputElement | null>(null);
 
 const toggleSearch = () => {
   if (store.isOpen) {
     store.close();
   } else {
     store.isOpen = true;
+    nextTick(() => inputRef.value?.focus());
   }
 };
 </script>

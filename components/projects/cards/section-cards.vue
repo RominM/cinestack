@@ -84,8 +84,13 @@ defineProps({
   }
 }
 @media screen and (max-width: 768px) {
-  .section-cards__title {
-    margin-bottom: 0px;
+  .section-cards {
+    &__header {
+      margin-bottom: 0;
+    }
+    &__title {
+      margin-bottom: 0px;
+    }
   }
 }
 </style>
