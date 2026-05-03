@@ -3,8 +3,6 @@
     <div class="maintenance__content">
       <div class="maintenance__logo">
         <logo />
-        <!-- <span>Cine</span>
-        <span>Stack</span> -->
       </div>
 
       <div class="maintenance__icon">
@@ -30,8 +28,11 @@ useHead({ title: "Maintenance — CineStack" });
 </script>
 
 <style scoped lang="scss">
+$--topbar: 62px;
+$--footer: 20px;
+
 .maintenance {
-  min-height: 100vh;
+  min-height: calc(100vh - $--topbar - $--footer);
   background-color: $dark-bg;
   display: flex;
   align-items: center;
