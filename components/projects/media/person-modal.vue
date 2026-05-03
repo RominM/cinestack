@@ -19,7 +19,7 @@
           :alt="person.name"
         />
         <div v-else class="person-modal__avatar --placeholder">
-          {{ person.name.charAt(0) }}
+          <h-icon :icon="UserIcon" color="#ffffff40" :size="32" />
         </div>
 
         <div class="person-modal__meta">
@@ -59,6 +59,7 @@
 </template>
 
 <script setup lang="ts">
+import { UserIcon } from "@hugeicons/core-free-icons";
 import { useAPI } from "~/composables/api/useApi";
 import { useUtils } from "~/composables/global/useUtils";
 import type { TmdbPersonDetail } from "~/types/ressources/TMDB/person";
@@ -141,7 +142,7 @@ watch(
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 0;
+  padding: 24px 0 0;
   min-width: 100%;
   max-width: 560px;
 
@@ -162,8 +163,8 @@ watch(
   }
 
   &__avatar {
-    width: 80px;
-    height: 80px;
+    width: 140px;
+    height: 140px;
     border-radius: 50%;
     object-fit: cover;
     flex-shrink: 0;
@@ -235,8 +236,22 @@ watch(
   }
 
   :deep(.carousel-container) {
-    padding: 16px 24px;
+    padding: 28px 32px;
     gap: 12px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .person-modal {
+    &__avatar {
+      width: 80px;
+      height: 80px;
+    }
+    &__header,
+    &__bio,
+    &__credits-title {
+      padding-inline: 0;
+    }
   }
 }
 </style>

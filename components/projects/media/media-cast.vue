@@ -14,7 +14,9 @@
             :src="`https://image.tmdb.org/t/p/w200${actor.profile_path}`"
             :alt="actor.name"
           />
-          <div v-else class="cast-item__placeholder" />
+          <div v-else class="cast-item__placeholder">
+            <h-icon :icon="UserIcon" color="#ffffff30" :size="22" />
+          </div>
         </div>
         <span class="cast-item__name">{{ actor.name }}</span>
         <span v-if="actor.character" class="cast-item__role">
@@ -31,6 +33,7 @@
 </template>
 
 <script setup lang="ts">
+import { UserIcon } from "@hugeicons/core-free-icons";
 import type { TmdbCastMember } from "~/types/ressources/TMDB/common";
 
 defineProps({
@@ -89,6 +92,9 @@ function openActorDetails(id: number) {
     width: 100%;
     height: 100%;
     background: #ffffff18;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   &__name {
