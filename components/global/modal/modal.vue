@@ -71,7 +71,8 @@ function close() {
   border-radius: 8px;
   background-color: $dark-surface;
   transform-origin: center;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: clip;
 
   &--fit {
     padding: 0;
