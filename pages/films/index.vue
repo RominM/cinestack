@@ -12,7 +12,7 @@
       :title="section.title"
       base-route="/films"
       :fetch-fn="section.fetchFn"
-      :variant="[1, 5].includes(index) ? 'landscape' : 'portrait'"
+      :variant="[0, 4].includes(index) ? 'landscape' : 'portrait'"
     />
   </div>
 </template>
@@ -49,31 +49,13 @@ function genreParam(): Record<string, string> {
 
 const sections = [
   {
-    title: "Populaires",
-    fetchFn: async (page: number) => {
-      const { data, error } = await useAPI().tmdb.discover.discoverMovies({
-        page: String(page),
-        sort_by: "popularity.desc",
-        ...genreParam(),
-      });
-      if (error || !data) return null;
-      return {
-        items: data.results.map(useUtils().mappers.movie),
-        totalPages: data.total_pages,
-      };
-    },
-  },
-  {
     title: "En ce moment au cinéma",
     fetchFn: async (page: number) => {
       const params: Record<string, string> = { page: String(page) };
       if (selectedGenres.value.length) params.with_genres = String(selectedGenres.value[0]);
       const { data, error } = await useAPI().tmdb.discover.getNowPlayingMovies(params);
       if (error || !data) return null;
-      return {
-        items: data.results.map(useUtils().mappers.movie),
-        totalPages: data.total_pages,
-      };
+      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages };
     },
   },
   {
@@ -87,10 +69,19 @@ const sections = [
         ...genreParam(),
       });
       if (error || !data) return null;
-      return {
-        items: data.results.map(useUtils().mappers.movie),
-        totalPages: data.total_pages,
-      };
+      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages };
+    },
+  },
+  {
+    title: "Populaires",
+    fetchFn: async (page: number) => {
+      const { data, error } = await useAPI().tmdb.discover.discoverMovies({
+        page: String(page),
+        sort_by: "popularity.desc",
+        ...genreParam(),
+      });
+      if (error || !data) return null;
+      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages };
     },
   },
   {
@@ -103,10 +94,7 @@ const sections = [
         ...genreParam(),
       });
       if (error || !data) return null;
-      return {
-        items: data.results.map(useUtils().mappers.movie),
-        totalPages: data.total_pages,
-      };
+      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages };
     },
   },
   {
@@ -115,15 +103,10 @@ const sections = [
       const { data, error } = await useAPI().tmdb.discover.discoverMovies({
         page: String(page),
         sort_by: "popularity.desc",
-        with_genres: genreParam().with_genres
-          ? `99,${genreParam().with_genres}`
-          : "99",
+        with_genres: genreParam().with_genres ? `99,${genreParam().with_genres}` : "99",
       });
       if (error || !data) return null;
-      return {
-        items: data.results.map(useUtils().mappers.movie),
-        totalPages: data.total_pages,
-      };
+      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages };
     },
   },
   {
@@ -132,15 +115,10 @@ const sections = [
       const { data, error } = await useAPI().tmdb.discover.discoverMovies({
         page: String(page),
         sort_by: "popularity.desc",
-        with_genres: genreParam().with_genres
-          ? `16,${genreParam().with_genres}`
-          : "16",
+        with_genres: genreParam().with_genres ? `16,${genreParam().with_genres}` : "16",
       });
       if (error || !data) return null;
-      return {
-        items: data.results.map(useUtils().mappers.movie),
-        totalPages: data.total_pages,
-      };
+      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages };
     },
   },
   {
@@ -154,10 +132,7 @@ const sections = [
         ...genreParam(),
       });
       if (error || !data) return null;
-      return {
-        items: data.results.map(useUtils().mappers.movie),
-        totalPages: data.total_pages,
-      };
+      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages };
     },
   },
   {
@@ -171,10 +146,7 @@ const sections = [
         ...genreParam(),
       });
       if (error || !data) return null;
-      return {
-        items: data.results.map(useUtils().mappers.movie),
-        totalPages: data.total_pages,
-      };
+      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages };
     },
   },
 ];
