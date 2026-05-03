@@ -1,4 +1,4 @@
-import type { TmdbGenre } from './common'
+import type { TmdbCredits, TmdbGenre, TmdbImages, TmdbPagedResponse, TmdbVideos } from './common'
 
 export type TmdbTV = {
   id: number
@@ -24,6 +24,12 @@ export type TmdbTVDetail = TmdbTV & {
   number_of_seasons: number
   episode_run_time: number[]
   genres: TmdbGenre[]
+  production_companies: {
+    id: number
+    name: string
+    logo_path: string | null
+    origin_country: string
+  }[]
   seasons: {
     id: number
     name: string
@@ -32,6 +38,10 @@ export type TmdbTVDetail = TmdbTV & {
     poster_path: string | null
     air_date: string
   }[]
+  credits?: TmdbCredits
+  videos?: TmdbVideos
+  images?: TmdbImages
+  recommendations?: TmdbPagedResponse<TmdbTV>
 }
 
 export type TmdbSeason = {

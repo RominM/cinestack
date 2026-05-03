@@ -79,11 +79,11 @@ function onClick(href: string) {
 
   &__glow {
     position: absolute;
-    inset: -12px;
+    inset: -6px;
     border-radius: 16px;
     background-size: cover;
     background-position: center;
-    filter: blur(20px) saturate(2) brightness(1.2);
+    filter: blur(10px) saturate(2) brightness(1.2);
     opacity: 0;
     z-index: -1;
     pointer-events: none;
