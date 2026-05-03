@@ -69,13 +69,15 @@ async function fetch() {
   const params = { page: String(currentPage.value) };
 
   if (type.value === "movie") {
-    const { data, error } = await useAPI().tmdb.trending.getTrendingMoviesByWeek(params);
+    const { data, error } =
+      await useAPI().tmdb.trending.getTrendingMoviesByWeek(params);
     isLoading.value = false;
     if (error || !data) return;
     totalPages.value = data.total_pages;
     items.value.push(...data.results.map(useUtils().mappers.movie));
   } else {
-    const { data, error } = await useAPI().tmdb.trending.getTrendingTVByWeek(params);
+    const { data, error } =
+      await useAPI().tmdb.trending.getTrendingTVByWeek(params);
     isLoading.value = false;
     if (error || !data) return;
     totalPages.value = data.total_pages;
@@ -102,7 +104,7 @@ onMounted(async () => {
 
 <style scoped lang="scss">
 .tendances {
-  padding: 100px 4rem 2rem;
+  padding: 62px 4rem 2rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -156,6 +158,15 @@ onMounted(async () => {
   &__sentinel {
     height: 40px;
     width: 100%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .tendances {
+    padding: 62px 16px;
+    &__grid {
+      justify-content: center;
+    }
   }
 }
 </style>

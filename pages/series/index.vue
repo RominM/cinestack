@@ -92,7 +92,7 @@ onMounted(async () => {
 
 <style scoped lang="scss">
 .series {
-  padding: 100px 4rem 2rem;
+  padding: 62px 4rem 2rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -116,6 +116,15 @@ onMounted(async () => {
   &__sentinel {
     height: 40px;
     width: 100%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .series {
+    padding: 62px 16px;
+    &__grid {
+      justify-content: center;
+    }
   }
 }
 </style>

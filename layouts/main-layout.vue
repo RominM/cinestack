@@ -30,7 +30,7 @@ onUnmounted(() => {
 <style lang="scss" scoped>
 .main-layout {
   background-color: $dark-bg;
-  overflow: hidden;
+  overflow-x: clip;
   &__topbar {
     position: fixed;
     top: 0;

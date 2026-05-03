@@ -184,4 +184,10 @@ function onClick(href: string) {
     }
   }
 }
+
+@media screen and (max-width: 768px) {
+  .search-card__overlay {
+    opacity: 1;
+  }
+}
 </style>
