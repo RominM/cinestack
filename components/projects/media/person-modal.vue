@@ -126,7 +126,8 @@ watch(
           return true;
         })
         .sort((a, b) => {
-          if (a.media_type !== b.media_type) return a.media_type === "movie" ? -1 : 1;
+          if (a.media_type !== b.media_type)
+            return a.media_type === "movie" ? -1 : 1;
           return (b.vote_count ?? 0) - (a.vote_count ?? 0);
         })
         .slice(0, 20);
@@ -226,7 +227,7 @@ watch(
   }
 
   :deep(.carousel-wrapper) {
-    margin-inline: -24px;
+    margin-inline: -34px;
   }
 
   :deep(.carousel-container) {
