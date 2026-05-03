@@ -39,6 +39,14 @@ const tv = computed<TmdbMedia | undefined>(() =>
 
 useHead({
   title: () => tv.value?.name ?? "Série",
+  meta: [
+    { property: 'og:title', content: () => tv.value?.name ?? "Série" },
+    { property: 'og:description', content: () => rawTV.value?.overview ?? "" },
+    { property: 'og:image', content: () => rawTV.value?.backdrop_path ? `https://image.tmdb.org/t/p/w1280${rawTV.value.backdrop_path}` : 'https://cinestack-mgl.netlify.app/cinestack.svg' },
+    { name: 'twitter:title', content: () => tv.value?.name ?? "Série" },
+    { name: 'twitter:description', content: () => rawTV.value?.overview ?? "" },
+    { name: 'twitter:image', content: () => rawTV.value?.backdrop_path ? `https://image.tmdb.org/t/p/w1280${rawTV.value.backdrop_path}` : 'https://cinestack-mgl.netlify.app/cinestack.svg' },
+  ],
 });
 
 const recommendations = computed<TmdbMedia[]>(
