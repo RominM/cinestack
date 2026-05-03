@@ -1,23 +1,36 @@
+import type { TmdbRequestResult } from '~/types/ressources/TMDB/common'
 import type { TmdbPersonDetail, TmdbPersonImages, TmdbPersonCredits } from '~/types/ressources/TMDB/person'
 import { useRequest } from '../../useRequest'
+import { BASE_TMDB_PATH } from '~/const/tmdb'
 
 export const useTmdbPerson = () => {
   const { get } = useRequest()
-
-  const fetch = <T>(endpoint: string, params?: Record<string, string>) =>
-    get<T>(`/tmdb${endpoint}`, { params })
+  const path = `${BASE_TMDB_PATH}/person`
 
   return {
-    getPersonDetail: (id: number | string) =>
-      fetch<TmdbPersonDetail>(`/person/${id}`),
+    getPersonDetail: async (id: number | string): TmdbRequestResult<TmdbPersonDetail> => {
+      const { data, error } = await get<TmdbPersonDetail>(`${path}/${id}`)
+      return { data, error }
+    },
 
-    getPersonMovieCredits: (id: number | string) =>
-      fetch<TmdbPersonCredits>(`/person/${id}/movie_credits`),
+    getPersonMovieCredits: async (id: number | string): TmdbRequestResult<TmdbPersonCredits> => {
+      const { data, error } = await get<TmdbPersonCredits>(`${path}/${id}/movie_credits`)
+      return { data, error }
+    },
 
-    getPersonTVCredits: (id: number | string) =>
-      fetch<TmdbPersonCredits>(`/person/${id}/tv_credits`),
+    getPersonTVCredits: async (id: number | string): TmdbRequestResult<TmdbPersonCredits> => {
+      const { data, error } = await get<TmdbPersonCredits>(`${path}/${id}/tv_credits`)
+      return { data, error }
+    },
 
-    getPersonImages: (id: number | string) =>
-      fetch<TmdbPersonImages>(`/person/${id}/images`),
+    getPersonCombinedCredits: async (id: number | string): TmdbRequestResult<TmdbPersonCredits> => {
+      const { data, error } = await get<TmdbPersonCredits>(`${path}/${id}/combined_credits`)
+      return { data, error }
+    },
+
+    getPersonImages: async (id: number | string): TmdbRequestResult<TmdbPersonImages> => {
+      const { data, error } = await get<TmdbPersonImages>(`${path}/${id}/images`)
+      return { data, error }
+    },
   }
 }

@@ -2,7 +2,12 @@
   <div v-if="cast.length" class="media-cast">
     <h3 class="media-cast__title">Casting</h3>
     <div class="media-cast__list">
-      <div v-for="actor in cast.slice(0, 8)" :key="actor.id" class="cast-item">
+      <button
+        v-for="actor in cast.slice(0, 8)"
+        :key="actor.id"
+        class="cast-item"
+        @click="openActorDetails(actor.id)"
+      >
         <div class="cast-item__avatar">
           <img
             v-if="actor.profile_path"
@@ -12,11 +17,16 @@
           <div v-else class="cast-item__placeholder" />
         </div>
         <span class="cast-item__name">{{ actor.name }}</span>
-        <span v-if="actor.character" class="cast-item__role">{{
-          actor.character
-        }}</span>
-      </div>
+        <span v-if="actor.character" class="cast-item__role">
+          {{ actor.character }}
+        </span>
+      </button>
     </div>
+
+    <person-modal
+      v-model:is-open="showActor"
+      :person-id="actorId ?? null"
+    />
   </div>
 </template>
 
@@ -26,6 +36,16 @@ import type { TmdbCastMember } from "~/types/ressources/TMDB/common";
 defineProps({
   cast: { type: Array as PropType<TmdbCastMember[]>, default: () => [] },
 });
+
+const showActor = ref<boolean>(false);
+const actorId = ref<number>();
+
+function openActorDetails(id: number) {
+  actorId.value = id;
+  nextTick(() => {
+    showActor.value = true;
+  });
+}
 </script>
 
 <style scoped lang="scss">
