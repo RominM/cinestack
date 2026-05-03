@@ -1,27 +1,18 @@
 <template>
   <div class="series">
-    <div class="series__header">
-      <genre-filter :genres="genres" v-model="selectedGenres" />
-    </div>
-
-    <div class="series__grid">
-      <search-card
-        v-for="tv in series"
-        :key="tv.id"
-        :media="tv"
-        :href="`/series/${tv.id}`"
-      />
-    </div>
-
-    <div ref="sentinel" class="series__sentinel" />
-    <loader v-if="isLoading" />
+    <media-section
+      v-for="section in sections"
+      :key="section.title"
+      :title="section.title"
+      base-route="/series"
+      :fetch-fn="section.fetchFn"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { useAPI } from "~/composables/api/useApi";
 import { useUtils } from "~/composables/global/useUtils";
-import type { TmdbMedia, TmdbGenre } from "~/types/ressources/TMDB/common";
 
 definePageMeta({
   key: "series",
@@ -31,100 +22,65 @@ definePageMeta({
 
 useHead({ title: "Séries" });
 
-const series = ref<TmdbMedia[]>([]);
-const genres = ref<TmdbGenre[]>([]);
-const selectedGenres = ref<number[]>([]);
-const isLoading = ref(false);
-const currentPage = ref(1);
-const totalPages = ref(1);
-const sentinel = ref<HTMLElement | null>(null);
+const today = new Date().toISOString().split("T")[0];
+const twoYearsAgo = new Date(Date.now() - 2 * 365 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
 
-watch(selectedGenres, () => {
-  series.value = [];
-  currentPage.value = 1;
-  totalPages.value = 1;
-  fetchSeries();
-});
-
-async function fetchSeries() {
-  if (isLoading.value || currentPage.value > totalPages.value) return;
-
-  isLoading.value = true;
-
-  const params: Record<string, string> = {
-    page: String(currentPage.value),
-    sort_by: "popularity.desc",
-  };
-
-  if (selectedGenres.value.length) {
-    params.with_genres = selectedGenres.value.join(",");
-  }
-
-  const { data, error } = await useAPI().tmdb.discover.discoverTV(params);
-
-  isLoading.value = false;
-  if (error || !data) return;
-
-  totalPages.value = data.total_pages;
-  series.value.push(...data.results.map(useUtils().mappers.tv));
-  currentPage.value++;
-}
-
-async function fetchGenres() {
-  const { data } = await useAPI().tmdb.genre.getTVGenres();
-  if (data) genres.value = data.genres;
-}
-
-onMounted(async () => {
-  await Promise.all([fetchGenres(), fetchSeries()]);
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      if (entries[0].isIntersecting) fetchSeries();
+const sections = [
+  {
+    title: "Populaires",
+    fetchFn: async (page: number) => {
+      const { data, error } = await useAPI().tmdb.discover.getPopularTV({ page: String(page) });
+      if (error || !data) return null;
+      return { items: data.results.map(useUtils().mappers.tv), totalPages: data.total_pages };
     },
-    { threshold: 0.1 },
-  );
-
-  if (sentinel.value) observer.observe(sentinel.value);
-  onUnmounted(() => observer.disconnect());
-});
+  },
+  {
+    title: "Les mieux notées",
+    fetchFn: async (page: number) => {
+      const { data, error } = await useAPI().tmdb.discover.getTopRatedTV({ page: String(page) });
+      if (error || !data) return null;
+      return { items: data.results.map(useUtils().mappers.tv), totalPages: data.total_pages };
+    },
+  },
+  {
+    title: "Nouvelles séries",
+    fetchFn: async (page: number) => {
+      const { data, error } = await useAPI().tmdb.discover.discoverTV({
+        page: String(page),
+        sort_by: "first_air_date.desc",
+        "first_air_date.lte": today,
+        "first_air_date.gte": twoYearsAgo,
+        "vote_count.gte": "20",
+      });
+      if (error || !data) return null;
+      return { items: data.results.map(useUtils().mappers.tv), totalPages: data.total_pages };
+    },
+  },
+  {
+    title: "Animations",
+    fetchFn: async (page: number) => {
+      const { data, error } = await useAPI().tmdb.discover.discoverTV({
+        page: String(page),
+        sort_by: "popularity.desc",
+        with_genres: "16",
+      });
+      if (error || !data) return null;
+      return { items: data.results.map(useUtils().mappers.tv), totalPages: data.total_pages };
+    },
+  },
+];
 </script>
 
 <style scoped lang="scss">
 .series {
-  padding: 62px 4rem 2rem;
+  padding: 100px 0 4rem;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 3rem;
 
-  &__header {
-    position: sticky;
-    top: 62px;
-    z-index: 100;
-    padding: 1rem 0;
-    margin-inline: -4rem;
-    overflow: hidden;
-    background: linear-gradient(to bottom, $dark-bg 80%, transparent);
-  }
-
-  &__grid {
-    display: flex;
-    flex-wrap: wrap;
+  @media (max-width: 768px) {
+    padding: 80px 0 2rem;
     gap: 2rem;
-  }
-
-  &__sentinel {
-    height: 40px;
-    width: 100%;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .series {
-    padding: 62px 16px;
-    &__grid {
-      justify-content: center;
-    }
   }
 }
 </style>

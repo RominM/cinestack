@@ -19,6 +19,8 @@ const getScrollAmount = () => {
   return container.value ? container.value.clientWidth * 0.8 : 350;
 };
 
+defineExpose({ container });
+
 const prev = () => {
   container.value?.scrollBy({ left: -getScrollAmount(), behavior: "smooth" });
 };

@@ -1,28 +1,18 @@
 <template>
   <div class="films">
-    <div class="films__header">
-      <genre-filter :genres="genres" v-model="selectedGenres" />
-    </div>
-
-    <div class="films__grid">
-      <search-card
-        v-for="movie in movies"
-        :key="movie.id"
-        :media="movie"
-        :href="`/films/${movie.id}`"
-      />
-    </div>
-
-    <div ref="sentinel" class="films__sentinel" />
-    <loader v-if="isLoading" />
+    <media-section
+      v-for="section in sections"
+      :key="section.title"
+      :title="section.title"
+      base-route="/films"
+      :fetch-fn="section.fetchFn"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { useAPI } from "~/composables/api/useApi";
 import { useUtils } from "~/composables/global/useUtils";
-import type { TmdbMedia } from "~/types/ressources/TMDB/common";
-import type { TmdbGenre } from "~/types/ressources/TMDB/common";
 
 definePageMeta({
   key: "films",
@@ -32,100 +22,71 @@ definePageMeta({
 
 useHead({ title: "Films" });
 
-const movies = ref<TmdbMedia[]>([]);
-const genres = ref<TmdbGenre[]>([]);
-const selectedGenres = ref<number[]>([]);
-const isLoading = ref(false);
-const currentPage = ref(1);
-const totalPages = ref(1);
-const sentinel = ref<HTMLElement | null>(null);
+const today = new Date().toISOString().split("T")[0];
+const oneYearAgo = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
 
-watch(selectedGenres, () => {
-  movies.value = [];
-  currentPage.value = 1;
-  totalPages.value = 1;
-  fetchMovies();
-});
-
-async function fetchMovies() {
-  if (isLoading.value || currentPage.value > totalPages.value) return;
-
-  isLoading.value = true;
-
-  const params: Record<string, string> = {
-    page: String(currentPage.value),
-    sort_by: "popularity.desc",
-  };
-
-  if (selectedGenres.value.length) {
-    params.with_genres = selectedGenres.value.join(",");
-  }
-
-  const { data, error } = await useAPI().tmdb.discover.discoverMovies(params);
-
-  isLoading.value = false;
-  if (error || !data) return;
-
-  totalPages.value = data.total_pages;
-  movies.value.push(...data.results.map(useUtils().mappers.movie));
-  currentPage.value++;
-}
-
-async function fetchGenres() {
-  const { data } = await useAPI().tmdb.genre.getMovieGenres();
-  if (data) genres.value = data.genres;
-}
-
-onMounted(async () => {
-  await Promise.all([fetchGenres(), fetchMovies()]);
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      if (entries[0].isIntersecting) fetchMovies();
+const sections = [
+  {
+    title: "Populaires",
+    fetchFn: async (page: number) => {
+      const { data, error } = await useAPI().tmdb.discover.getPopularMovies({ page: String(page) });
+      if (error || !data) return null;
+      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages };
     },
-    { threshold: 0.2 },
-  );
-
-  if (sentinel.value) observer.observe(sentinel.value);
-  onUnmounted(() => observer.disconnect());
-});
+  },
+  {
+    title: "En ce moment",
+    fetchFn: async (page: number) => {
+      const { data, error } = await useAPI().tmdb.discover.getNowPlayingMovies({ page: String(page) });
+      if (error || !data) return null;
+      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages };
+    },
+  },
+  {
+    title: "À venir",
+    fetchFn: async (page: number) => {
+      const { data, error } = await useAPI().tmdb.discover.getUpcomingMovies({ page: String(page) });
+      if (error || !data) return null;
+      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages };
+    },
+  },
+  {
+    title: "Les mieux notés",
+    fetchFn: async (page: number) => {
+      const { data, error } = await useAPI().tmdb.discover.getTopRatedMovies({ page: String(page) });
+      if (error || !data) return null;
+      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages };
+    },
+  },
+  {
+    title: "Courts métrages",
+    fetchFn: async (page: number) => {
+      const { data, error } = await useAPI().tmdb.discover.discoverMovies({
+        page: String(page),
+        sort_by: "popularity.desc",
+        "with_runtime.lte": "60",
+        "with_runtime.gte": "10",
+        "vote_count.gte": "50",
+        "release_date.gte": oneYearAgo,
+        "release_date.lte": today,
+      });
+      if (error || !data) return null;
+      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages };
+    },
+  },
+];
 </script>
 
 <style scoped lang="scss">
 .films {
-  padding: 62px 4rem 2rem;
+  padding: 100px 0 4rem;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 3rem;
 
-  &__header {
-    position: sticky;
-    top: 62px;
-    z-index: 100;
-    padding: 1rem 0;
-    margin-inline: -4rem;
-    overflow: hidden;
-    background: linear-gradient(to bottom, $dark-bg 80%, transparent);
-  }
-
-  &__grid {
-    display: flex;
-    flex-wrap: wrap;
+  @media (max-width: 768px) {
+    padding: 80px 0 2rem;
     gap: 2rem;
-  }
-
-  &__sentinel {
-    height: 40px;
-    width: 100%;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .films {
-    padding: 62px 16px;
-    &__grid {
-      justify-content: center;
-    }
   }
 }
 </style>
