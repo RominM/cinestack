@@ -9,6 +9,7 @@ export default defineNuxtConfig({
         { name: 'description', content: 'Découvrez les meilleurs films et séries du moment. Tendances, recommandations et fiches détaillées.' },
         { property: 'og:site_name', content: 'Cinestack' },
         { property: 'og:type', content: 'website' },
+        { property: 'og:title', content: 'Cinestack' },
         { property: 'og:description', content: 'Découvrez les meilleurs films et séries du moment. Tendances, recommandations et fiches détaillées.' },
         { property: 'og:image', content: 'https://cinestack-mgl.netlify.app/og-image.png' },
         { name: 'twitter:card', content: 'summary_large_image' },
