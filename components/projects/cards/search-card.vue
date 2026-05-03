@@ -53,8 +53,10 @@ const props = defineProps({
 
 const store = useSearchStore();
 const router = useRouter();
-const { cardRef, shineStyle, onMouseMove, applyTilt, resetTilt } =
-  useCardTilt();
+const { cardRef, shineStyle, onMouseMove, applyTilt, resetTilt } = useCardTilt(
+  1.02,
+  "0",
+);
 
 const year = computed(() => props.media.releaseDate?.slice(0, 4) ?? "");
 
@@ -71,7 +73,7 @@ function onClick(href: string) {
 <style scoped lang="scss">
 .search-card {
   position: relative;
-  width: 180px;
+  min-width: 180px;
   border-radius: 14px;
   cursor: pointer;
   overflow: visible;
@@ -143,7 +145,6 @@ function onClick(href: string) {
     flex-direction: column;
     gap: 4px;
     opacity: 0;
-    transform: translateY(4px);
     transition:
       opacity 0.3s ease,
       transform 0.3s ease;

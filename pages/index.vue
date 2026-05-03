@@ -87,10 +87,13 @@ async function fetchAll() {
 }
 
 @media screen and (max-width: 768px) {
-  .home__content {
-    display: flex;
-    flex-direction: column;
-    gap: 110px;
+  .home {
+    padding-bottom: 100px;
+    &__content {
+      display: flex;
+      flex-direction: column;
+      gap: 110px;
+    }
   }
 }
 </style>

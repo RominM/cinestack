@@ -103,6 +103,8 @@ onMounted(async () => {
     top: 62px;
     z-index: 100;
     padding: 1rem 0;
+    margin-inline: -4rem;
+    overflow: hidden;
     background: linear-gradient(to bottom, $dark-bg 80%, transparent);
   }
 

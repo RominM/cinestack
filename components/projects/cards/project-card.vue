@@ -122,11 +122,7 @@ function onLeave(e: MouseEvent) {
     left: 0;
     right: 0;
     padding: 32px 12px 12px;
-    background: linear-gradient(
-      to top,
-      rgb(0, 0, 0) 0%,
-      transparent 100%
-    );
+    background: linear-gradient(to top, rgb(0, 0, 0) 0%, transparent 100%);
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -174,6 +170,12 @@ function onLeave(e: MouseEvent) {
       opacity: 1;
       transform: translateY(0);
     }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .project-card__overlay {
+    opacity: 1;
   }
 }
 </style>

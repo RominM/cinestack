@@ -11,14 +11,14 @@
           class="search-overlay__section"
         >
           <span class="search-overlay__label">Films</span>
-          <div class="search-overlay__row">
+          <carousel class="search-overlay__carousel">
             <search-card
               v-for="movie in store.resultsByType.movies"
               :key="movie.id"
               :media="useUtils().mappers.movie(movie)"
               :href="`/films/${movie.id}`"
             />
-          </div>
+          </carousel>
         </section>
 
         <section
@@ -26,14 +26,14 @@
           class="search-overlay__section"
         >
           <span class="search-overlay__label">Séries</span>
-          <div class="search-overlay__row">
+          <carousel class="search-overlay__carousel">
             <search-card
               v-for="tv in store.resultsByType.tv"
               :key="tv.id"
               :media="useUtils().mappers.tv(tv)"
               :href="`/tv/${tv.id}`"
             />
-          </div>
+          </carousel>
         </section>
 
         <section
@@ -98,7 +98,7 @@ onKeyStroke("Escape", () => store.close());
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   z-index: 9998;
-  padding: 2rem;
+  padding: 2rem 0;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -112,6 +112,7 @@ onKeyStroke("Escape", () => store.close());
     text-transform: uppercase;
     margin-bottom: 1rem;
     font-weight: 400;
+    padding-inline: 2rem;
   }
 
   &__section {
@@ -119,10 +120,18 @@ onKeyStroke("Escape", () => store.close());
     flex-direction: column;
   }
 
+  &__carousel {
+    :deep(.carousel-container) {
+      padding: 24px 2rem;
+      gap: 16px;
+    }
+  }
+
   &__row {
     display: flex;
-    gap: 16px;
+    gap: 12px;
     flex-wrap: wrap;
+    padding-inline: 2rem;
 
     &--people {
       gap: 12px;

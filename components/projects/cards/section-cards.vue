@@ -87,7 +87,20 @@ defineProps({
   .section-cards {
     &__header {
       margin-bottom: 0;
+
+      &__link {
+        padding: 0;
+        span {
+          display: none;
+        }
+
+        .section-cards__header__link__arrow {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
     }
+
     &__title {
       margin-bottom: 0px;
     }

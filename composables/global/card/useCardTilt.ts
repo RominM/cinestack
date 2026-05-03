@@ -1,4 +1,4 @@
-export const useCardTilt = () => {
+export const useCardTilt = (scale= 1.2, transY = '-20px') => {
   const cardRef = ref<HTMLElement | null>(null)
   const isHovered = ref(false)
   const mouseX = ref(50)
@@ -22,7 +22,7 @@ export const useCardTilt = () => {
     mouseY.value = (y / rect.height) * 100
 
     if (!cardRef.value) return
-    cardRef.value.style.transform = `perspective(800px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.2) translateY(-20px)`
+    cardRef.value.style.transform = `perspective(800px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(${scale}) translateY(${transY})`
   }
 
   function applyTilt() {

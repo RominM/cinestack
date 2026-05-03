@@ -163,7 +163,7 @@ watch(
 
 @media screen and (max-width: 768px) {
   .hero-header {
-    height: 40vh;
+    height: 50vh;
   }
 }
 </style>

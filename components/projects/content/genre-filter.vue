@@ -1,10 +1,16 @@
 <template>
   <div class="genre-filter">
     <button
+      :class="['genre-filter__btn', { active: selectedId === null }]"
+      @click="select(null)"
+    >
+      Tout
+    </button>
+    <button
       v-for="genre in genres"
       :key="genre.id"
-      :class="['genre-filter__btn', { active: selectedIds.includes(genre.id) }]"
-      @click="toggle(genre.id)"
+      :class="['genre-filter__btn', { active: selectedId === genre.id }]"
+      @click="select(genre.id)"
     >
       {{ genre.name }}
     </button>
@@ -21,16 +27,13 @@ const props = defineProps({
 
 const emit = defineEmits(["update:modelValue"]);
 
-const selectedIds = ref<number[]>(props.modelValue);
+const selectedId = ref<number | null>(
+  props.modelValue.length ? props.modelValue[0] : null,
+);
 
-function toggle(id: number) {
-  const idx = selectedIds.value.indexOf(id);
-  if (idx === -1) {
-    selectedIds.value.push(id);
-  } else {
-    selectedIds.value.splice(idx, 1);
-  }
-  emit("update:modelValue", [...selectedIds.value]);
+function select(id: number | null) {
+  selectedId.value = id;
+  emit("update:modelValue", id !== null ? [id] : []);
 }
 </script>
 
@@ -39,6 +42,21 @@ function toggle(id: number) {
   display: flex;
   flex-wrap: nowrap;
   gap: 8px;
+  overflow-x: auto;
+  padding-inline: 4rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &::after {
+    content: "";
+    display: block;
+    min-width: 4rem;
+    flex-shrink: 0;
+  }
 
   &__btn {
     background: transparent;
@@ -47,6 +65,7 @@ function toggle(id: number) {
     padding: 5px 14px;
     border-radius: 48px;
     font-size: 12px;
+    white-space: nowrap;
     cursor: pointer;
     transition: 0.2s;
     letter-spacing: 0.3px;

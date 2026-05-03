@@ -32,4 +32,10 @@ const year = new Date().getFullYear();
     }
   }
 }
+
+@media screen and (max-width: 768px) {
+  .footer {
+    padding: 1.5rem 1rem;
+  }
+}
 </style>

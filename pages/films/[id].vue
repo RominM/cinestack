@@ -63,6 +63,9 @@ async function getMovieDetails() {
 </script>
 
 <style scoped lang="scss">
-.movie {
+@media screen and (max-width: 768px) {
+  .movie {
+    padding-bottom: 85px;
+  }
 }
 </style>
