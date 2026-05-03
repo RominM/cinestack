@@ -59,7 +59,7 @@ onMounted(() => getTVDetails());
 async function getTVDetails() {
   isLoading.value = true;
   const { data, error } = await useAPI().tmdb.tv.getTVDetail(id, {
-    append_to_response: "credits,videos,images,recommendations",
+    append_to_response: "credits,videos,images,recommendations,watch/providers",
     include_video_language: "fr,null",
   });
   isLoading.value = false;

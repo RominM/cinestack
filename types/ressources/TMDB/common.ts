@@ -65,6 +65,24 @@ export type TmdbCredits = {
   crew: TmdbCrewMember[]
 }
 
+export type TmdbWatchProvider = {
+  provider_id: number
+  provider_name: string
+  logo_path: string
+  display_priority: number
+}
+
+export type TmdbWatchProviders = {
+  results: {
+    [countryCode: string]: {
+      link: string
+      flatrate?: TmdbWatchProvider[]
+      rent?: TmdbWatchProvider[]
+      buy?: TmdbWatchProvider[]
+    }
+  }
+}
+
 export type TmdbMediaType = 'movie' | 'tv'
 
 export type TmdbMedia = {

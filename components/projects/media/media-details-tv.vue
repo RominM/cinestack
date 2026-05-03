@@ -31,6 +31,8 @@
       </div>
     </div>
 
+    <media-watch-providers :watch-providers="raw['watch/providers']" />
+
     <p v-if="raw.overview" class="media-detail__overview">{{ raw.overview }}</p>
 
     <media-production :companies="raw.production_companies ?? []" />

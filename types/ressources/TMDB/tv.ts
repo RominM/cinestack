@@ -1,4 +1,4 @@
-import type { TmdbCredits, TmdbGenre, TmdbImages, TmdbPagedResponse, TmdbVideos } from './common'
+import type { TmdbCredits, TmdbGenre, TmdbImages, TmdbPagedResponse, TmdbVideos, TmdbWatchProviders } from './common'
 
 export type TmdbTV = {
   id: number
@@ -42,6 +42,7 @@ export type TmdbTVDetail = TmdbTV & {
   videos?: TmdbVideos
   images?: TmdbImages
   recommendations?: TmdbPagedResponse<TmdbTV>
+  'watch/providers'?: TmdbWatchProviders
 }
 
 export type TmdbSeason = {

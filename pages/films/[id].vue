@@ -80,7 +80,7 @@ onMounted(() => getMovieDetails());
 async function getMovieDetails() {
   isLoading.value = true;
   const { data, error } = await useAPI().tmdb.movie.getMovieDetail(id, {
-    append_to_response: "credits,videos,images,recommendations",
+    append_to_response: "credits,videos,images,recommendations,watch/providers",
     include_video_language: "fr,null",
   });
   isLoading.value = false;
