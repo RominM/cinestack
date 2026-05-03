@@ -4,7 +4,6 @@
       <genre-filter :genres="genres" v-model="selectedGenres" />
     </div>
 
-    <h1 style="color: #fff">Les Films</h1>
     <div class="films__grid">
       <search-card
         v-for="movie in movies"
