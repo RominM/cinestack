@@ -34,11 +34,13 @@ const props = defineProps({
   raw: { type: Object as PropType<TmdbMovieDetail>, required: true },
 });
 
-const mainTrailer = computed(() =>
-  props.raw.videos?.results?.find(
-    (v) => v.type === "Trailer" && v.site === "YouTube",
-  ),
-);
+const mainTrailer = computed(() => {
+  const videos = props.raw.videos?.results ?? [];
+  return (
+    videos.find((v) => v.type === "Trailer" && v.site === "YouTube" && v.iso_639_1 === "fr") ??
+    videos.find((v) => v.type === "Trailer" && v.site === "YouTube")
+  );
+});
 </script>
 
 <style scoped lang="scss">

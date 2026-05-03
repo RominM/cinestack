@@ -27,6 +27,8 @@ export type TmdbVideo = {
   type: string
   official: boolean
   published_at: string
+  iso_639_1: string
+  iso_3166_1: string
 }
 
 export type TmdbImages = {

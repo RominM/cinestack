@@ -5,7 +5,8 @@
         <div
           v-if="isOpen"
           class="modal__dialog"
-          :style="{ minWidth: minWidth, maxWidth: maxWidth }"
+          :class="{ 'modal__dialog--fit': fit }"
+          :style="!fit ? { minWidth, maxWidth } : {}"
           @click.stop
         >
           <div class="modal__dialog--header">
@@ -35,6 +36,7 @@ const props = defineProps({
   title: { type: String, default: "" },
   minWidth: { type: String, default: "50px" },
   maxWidth: { type: String, default: "80%" },
+  fit: { type: Boolean, default: false },
 });
 
 const emit = defineEmits(["update:isOpen"]);
@@ -52,6 +54,7 @@ function close() {
   width: 100dvw;
   height: 100dvh;
   background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(2px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -69,6 +72,18 @@ function close() {
   background-color: $dark-surface;
   transform-origin: center;
   overflow: auto;
+
+  &--fit {
+    padding: 0;
+    overflow: hidden;
+    width: fit-content;
+    max-width: unset;
+
+    > .modal__dialog--header {
+      padding: 8px 12px;
+    }
+  }
+
   &--header {
     display: flex;
     justify-content: space-between;

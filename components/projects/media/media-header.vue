@@ -34,16 +34,21 @@
     :is-open="isTrailerOpen"
     dismisable
     show-cross
+    fit
     :title="`Bande-annonce ${title}`"
     @update:is-open="isTrailerOpen = $event"
   >
-    <iframe
-      v-if="isTrailerOpen"
-      :src="`https://www.youtube.com/embed/${trailerKey}?autoplay=1`"
-      class="media-header__iframe"
-      allow="autoplay; encrypted-media"
-      allowfullscreen
-    />
+    <div class="media-header__video-wrapper">
+      <loader v-if="!isVideoLoaded" />
+      <iframe
+        v-if="isTrailerOpen"
+        :src="`https://www.youtube.com/embed/${trailerKey}?autoplay=1`"
+        class="media-header__iframe"
+        allow="autoplay; encrypted-media"
+        allowfullscreen
+        @load="isVideoLoaded = true"
+      />
+    </div>
   </modal>
 </template>
 
@@ -63,6 +68,11 @@ const props = defineProps({
 });
 
 const isTrailerOpen = ref(false);
+const isVideoLoaded = ref(false);
+
+watch(isTrailerOpen, (val) => {
+  if (!val) isVideoLoaded.value = false;
+});
 
 const releaseYear = computed(() => props.releaseDate?.split("-")[0]);
 
@@ -134,16 +144,23 @@ const formattedRuntime = computed(() => {
     }
   }
 
-  &__iframe {
-    width: 100%;
-    aspect-ratio: 16/9;
-    border: none;
-    border-radius: 4px;
-    display: block;
-    margin-top: 16px;
-    @media (max-width: 768px) {
-      width: 85vw;
+  &__video-wrapper {
+    position: relative;
+    width: min(90dvw, calc((90dvh - 52px) * 16 / 9));
+    aspect-ratio: 16 / 9;
+
+    :deep(.loader) {
+      position: absolute;
+      inset: 0;
+      height: 100%;
     }
+  }
+
+  &__iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: none;
   }
 
   @media (max-width: 768px) {
@@ -171,8 +188,8 @@ const formattedRuntime = computed(() => {
       justify-content: center;
     }
 
-    &__iframe {
-      width: 90vw;
+    &__video-wrapper {
+      width: 90dvw;
     }
   }
 }
