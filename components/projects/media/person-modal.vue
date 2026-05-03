@@ -141,7 +141,7 @@ watch(
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 0 24px 24px;
+  padding: 0;
   min-width: 100%;
   max-width: 560px;
 
@@ -151,12 +151,14 @@ watch(
     justify-content: center;
     min-height: 200px;
     min-width: 300px;
+    padding-inline: 24px;
   }
 
   &__header {
     display: flex;
     gap: 16px;
     align-items: flex-start;
+    padding-inline: 24px;
   }
 
   &__avatar {
@@ -208,12 +210,14 @@ watch(
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: #ffffff20 transparent;
+    padding-inline: 24px;
   }
 
   &__credits {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    padding-bottom: 14px;
   }
 
   &__credits-title {
@@ -223,11 +227,11 @@ watch(
     letter-spacing: 1.5px;
     font-weight: 400;
     margin: 0;
-    padding-inline: 0;
+    padding-inline: 24px;
   }
 
   :deep(.carousel-wrapper) {
-    margin-inline: -34px;
+    margin-inline: -10px;
   }
 
   :deep(.carousel-container) {
