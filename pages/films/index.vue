@@ -12,7 +12,7 @@
       :title="section.title"
       base-route="/films"
       :fetch-fn="section.fetchFn"
-      :variant="[2, 5].includes(index) ? 'landscape' : 'portrait'"
+      :variant="[1, 5].includes(index) ? 'landscape' : 'portrait'"
     />
   </div>
 </template>
@@ -85,8 +85,9 @@ const sections = [
     fetchFn: async (page: number) => {
       const { data, error } = await useAPI().tmdb.discover.discoverMovies({
         page: String(page),
-        sort_by: "primary_release_date.asc",
+        sort_by: "popularity.desc",
         "primary_release_date.gte": today,
+        "popularity.gte": "10",
         ...genreParam(),
       });
       if (error || !data) return null;
