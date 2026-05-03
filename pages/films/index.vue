@@ -64,15 +64,11 @@ const sections = [
     },
   },
   {
-    title: "En ce moment",
+    title: "En ce moment au cinéma",
     fetchFn: async (page: number) => {
-      const { data, error } = await useAPI().tmdb.discover.discoverMovies({
-        page: String(page),
-        sort_by: "popularity.desc",
-        "primary_release_date.gte": oneMonthAgo,
-        "primary_release_date.lte": today,
-        ...genreParam(),
-      });
+      const params: Record<string, string> = { page: String(page) };
+      if (selectedGenres.value.length) params.with_genres = String(selectedGenres.value[0]);
+      const { data, error } = await useAPI().tmdb.discover.getNowPlayingMovies(params);
       if (error || !data) return null;
       return {
         items: data.results.map(useUtils().mappers.movie),
