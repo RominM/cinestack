@@ -4,6 +4,8 @@
       <genre-filter :genres="genres" v-model="selectedGenres" />
     </div>
 
+    <h1 class="series--title">Serie</h1>
+
     <media-section
       v-for="section in sections"
       :key="`${section.title}-${selectedGenres[0] ?? 'all'}`"
@@ -130,10 +132,17 @@ onMounted(async () => {
     padding: 1rem 0;
     background: linear-gradient(to bottom, $dark-bg 80%, transparent);
   }
+  &--title {
+    padding-left: 20px;
+    color: #fff;
+    @media (max-width: 768px) {
+      display: block;
+    }
+  }
 
   @media (max-width: 768px) {
     padding: 62px 0 2rem;
-    gap: 2rem;
+    gap: 0;
   }
 }
 </style>

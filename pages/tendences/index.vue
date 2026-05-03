@@ -1,5 +1,7 @@
 <template>
   <div class="tendances">
+    <h1 class="tendances--title">Tendences</h1>
+
     <media-section
       v-for="section in sections"
       :key="section.title"
@@ -62,9 +64,17 @@ const sections = [
   flex-direction: column;
   gap: 3rem;
 
+  &--title {
+    padding-left: 20px;
+    color: #fff;
+    @media (max-width: 768px) {
+      display: block;
+    }
+  }
+
   @media (max-width: 768px) {
     padding: 62px 0 2rem;
-    gap: 2rem;
+    gap: 0;
   }
 }
 </style>

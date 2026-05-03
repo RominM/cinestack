@@ -82,4 +82,10 @@ function select(id: number | null) {
     }
   }
 }
+
+@media screen and (max-width: 768px) {
+  .genre-filter {
+    padding-inline: 20px;
+  }
+}
 </style>
