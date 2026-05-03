@@ -112,21 +112,59 @@ const sections = [
     },
   },
   {
-    title: "Courts métrages",
+    title: "Documentaires",
+    fetchFn: async (page: number) => {
+      const { data, error } = await useAPI().tmdb.discover.discoverMovies({
+        page: String(page),
+        sort_by: "popularity.desc",
+        with_genres: genreParam().with_genres
+          ? `99,${genreParam().with_genres}`
+          : "99",
+      });
+      if (error || !data) return null;
+      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages };
+    },
+  },
+  {
+    title: "Films d'animation",
+    fetchFn: async (page: number) => {
+      const { data, error } = await useAPI().tmdb.discover.discoverMovies({
+        page: String(page),
+        sort_by: "popularity.desc",
+        with_genres: genreParam().with_genres
+          ? `16,${genreParam().with_genres}`
+          : "16",
+      });
+      if (error || !data) return null;
+      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages };
+    },
+  },
+  {
+    title: "Films français",
     fetchFn: async (page: number) => {
       const { data, error } = await useAPI().tmdb.discover.discoverMovies({
         page: String(page),
         sort_by: "vote_count.desc",
-        "with_runtime.gte": "1",
-        "with_runtime.lte": "40",
-        "vote_count.gte": "10",
+        with_original_language: "fr",
+        "vote_count.gte": "500",
         ...genreParam(),
       });
       if (error || !data) return null;
-      return {
-        items: data.results.map(useUtils().mappers.movie),
-        totalPages: data.total_pages,
-      };
+      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages };
+    },
+  },
+  {
+    title: "Classiques",
+    fetchFn: async (page: number) => {
+      const { data, error } = await useAPI().tmdb.discover.discoverMovies({
+        page: String(page),
+        sort_by: "vote_average.desc",
+        "primary_release_date.lte": "1990-12-31",
+        "vote_count.gte": "1000",
+        ...genreParam(),
+      });
+      if (error || !data) return null;
+      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages };
     },
   },
 ];
