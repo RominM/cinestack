@@ -68,8 +68,8 @@ const sections = [
       const { data, error } = await useAPI().tmdb.discover.discoverMovies({
         page: String(page),
         sort_by: "popularity.desc",
-        "release_date.gte": oneMonthAgo,
-        "release_date.lte": today,
+        "primary_release_date.gte": oneMonthAgo,
+        "primary_release_date.lte": today,
         ...genreParam(),
       });
       if (error || !data) return null;
@@ -84,8 +84,8 @@ const sections = [
     fetchFn: async (page: number) => {
       const { data, error } = await useAPI().tmdb.discover.discoverMovies({
         page: String(page),
-        sort_by: "release_date.asc",
-        "release_date.gte": today,
+        sort_by: "primary_release_date.asc",
+        "primary_release_date.gte": today,
         ...genreParam(),
       });
       if (error || !data) return null;
