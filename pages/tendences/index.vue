@@ -3,11 +3,12 @@
     <h1 class="tendances--title">Tendences</h1>
 
     <media-section
-      v-for="section in sections"
+      v-for="(section, index) in sections"
       :key="section.title"
       :title="section.title"
       :base-route="section.baseRoute"
       :fetch-fn="section.fetchFn"
+      :variant="index === 1 ? 'landscape' : 'portrait'"
     />
   </div>
 </template>

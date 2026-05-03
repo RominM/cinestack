@@ -7,11 +7,12 @@
     <h1 class="films--title">Films</h1>
 
     <media-section
-      v-for="section in sections"
+      v-for="(section, index) in sections"
       :key="`${section.title}-${selectedGenres[0] ?? 'all'}`"
       :title="section.title"
       base-route="/films"
       :fetch-fn="section.fetchFn"
+      :variant="[2, 5].includes(index) ? 'landscape' : 'portrait'"
     />
   </div>
 </template>
@@ -122,7 +123,10 @@ const sections = [
           : "99",
       });
       if (error || !data) return null;
-      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages };
+      return {
+        items: data.results.map(useUtils().mappers.movie),
+        totalPages: data.total_pages,
+      };
     },
   },
   {
@@ -136,11 +140,14 @@ const sections = [
           : "16",
       });
       if (error || !data) return null;
-      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages };
+      return {
+        items: data.results.map(useUtils().mappers.movie),
+        totalPages: data.total_pages,
+      };
     },
   },
   {
-    title: "Films français",
+    title: "Réalisations françaises",
     fetchFn: async (page: number) => {
       const { data, error } = await useAPI().tmdb.discover.discoverMovies({
         page: String(page),
@@ -150,7 +157,10 @@ const sections = [
         ...genreParam(),
       });
       if (error || !data) return null;
-      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages };
+      return {
+        items: data.results.map(useUtils().mappers.movie),
+        totalPages: data.total_pages,
+      };
     },
   },
   {
@@ -164,7 +174,10 @@ const sections = [
         ...genreParam(),
       });
       if (error || !data) return null;
-      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages };
+      return {
+        items: data.results.map(useUtils().mappers.movie),
+        totalPages: data.total_pages,
+      };
     },
   },
 ];

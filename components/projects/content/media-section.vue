@@ -2,14 +2,24 @@
   <div class="media-section">
     <h2 class="media-section__title">{{ title }}</h2>
     <carousel ref="carouselRef">
-      <search-card
-        v-for="item in items"
-        :key="item.id"
-        :media="item"
-        :href="`${baseRoute}/${item.id}`"
-      />
+      <template v-if="variant === 'landscape'">
+        <landscape-card
+          v-for="item in items"
+          :key="item.id"
+          :media="item"
+          :href="`${baseRoute}/${item.id}`"
+        />
+      </template>
+      <template v-else>
+        <search-card
+          v-for="item in items"
+          :key="item.id"
+          :media="item"
+          :href="`${baseRoute}/${item.id}`"
+        />
+      </template>
       <template v-if="isLoading">
-        <div v-for="i in 3" :key="`sk-${i}`" class="media-section__skeleton" />
+        <div v-for="i in 3" :key="`sk-${i}`" class="media-section__skeleton" :class="{ '--landscape': variant === 'landscape' }" />
       </template>
       <div ref="sentinel" class="media-section__sentinel" />
     </carousel>
@@ -25,6 +35,7 @@ const props = defineProps<{
   title: string;
   baseRoute: string;
   fetchFn: (page: number) => Promise<FetchResult>;
+  variant?: "portrait" | "landscape";
 }>();
 
 const carouselRef = ref<{ container: HTMLElement | null } | null>(null);
@@ -71,7 +82,7 @@ onMounted(async () => {
   gap: 1rem;
 
   &__title {
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 500;
     color: #ffffff80;
     text-transform: uppercase;
@@ -81,6 +92,7 @@ onMounted(async () => {
 
     @media (max-width: 768px) {
       padding-inline: 1.5rem;
+      font-size: 14px;
     }
   }
 
@@ -98,9 +110,19 @@ onMounted(async () => {
     width: 160px;
     height: 240px;
     border-radius: 12px;
-    background: linear-gradient(90deg, #ffffff08 25%, #ffffff14 50%, #ffffff08 75%);
+    background: linear-gradient(
+      90deg,
+      #ffffff08 25%,
+      #ffffff14 50%,
+      #ffffff08 75%
+    );
     background-size: 200% 100%;
     animation: shimmer 1.4s infinite;
+
+    &.--landscape {
+      width: 280px;
+      height: 195px;
+    }
   }
 
   &__sentinel {
@@ -111,7 +133,11 @@ onMounted(async () => {
 }
 
 @keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 </style>

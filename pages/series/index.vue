@@ -7,11 +7,12 @@
     <h1 class="series--title">Serie</h1>
 
     <media-section
-      v-for="section in sections"
+      v-for="(section, index) in sections"
       :key="`${section.title}-${selectedGenres[0] ?? 'all'}`"
       :title="section.title"
       base-route="/series"
       :fetch-fn="section.fetchFn"
+      :variant="[2].includes(index) ? 'landscape' : 'portrait'"
     />
   </div>
 </template>
