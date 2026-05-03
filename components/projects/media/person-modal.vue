@@ -125,7 +125,10 @@ watch(
           seen.add(m.id);
           return true;
         })
-        .sort((a, b) => (b.vote_count ?? 0) - (a.vote_count ?? 0))
+        .sort((a, b) => {
+          if (a.media_type !== b.media_type) return a.media_type === "movie" ? -1 : 1;
+          return (b.vote_count ?? 0) - (a.vote_count ?? 0);
+        })
         .slice(0, 20);
     }
   },
