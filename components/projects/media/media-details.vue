@@ -21,7 +21,7 @@
 
     <p v-if="raw.overview" class="media-detail__overview">{{ raw.overview }}</p>
 
-    <media-companies :companies="raw.production_companies ?? []" />
+    <media-production :companies="raw.production_companies ?? []" />
 
     <media-cast :cast="raw.credits?.cast ?? []" />
   </div>
