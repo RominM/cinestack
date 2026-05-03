@@ -139,7 +139,7 @@ onMounted(async () => {
 
 <style scoped lang="scss">
 .films {
-  padding: 100px 0 4rem;
+  padding: 62px 0 4rem;
   display: flex;
   flex-direction: column;
   gap: 3rem;
@@ -153,7 +153,7 @@ onMounted(async () => {
   }
 
   @media (max-width: 768px) {
-    padding: 80px 0 2rem;
+    padding: 62px 0 2rem;
     gap: 2rem;
   }
 }

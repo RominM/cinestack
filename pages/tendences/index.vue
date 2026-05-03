@@ -27,18 +27,29 @@ const sections = [
     title: "Films de la semaine",
     baseRoute: "/films",
     fetchFn: async (page: number) => {
-      const { data, error } = await useAPI().tmdb.trending.getTrendingMoviesByWeek({ page: String(page) });
+      const { data, error } =
+        await useAPI().tmdb.trending.getTrendingMoviesByWeek({
+          page: String(page),
+        });
       if (error || !data) return null;
-      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages };
+      return {
+        items: data.results.map(useUtils().mappers.movie),
+        totalPages: data.total_pages,
+      };
     },
   },
   {
     title: "Séries de la semaine",
     baseRoute: "/series",
     fetchFn: async (page: number) => {
-      const { data, error } = await useAPI().tmdb.trending.getTrendingTVByWeek({ page: String(page) });
+      const { data, error } = await useAPI().tmdb.trending.getTrendingTVByWeek({
+        page: String(page),
+      });
       if (error || !data) return null;
-      return { items: data.results.map(useUtils().mappers.tv), totalPages: data.total_pages };
+      return {
+        items: data.results.map(useUtils().mappers.tv),
+        totalPages: data.total_pages,
+      };
     },
   },
 ];
@@ -46,13 +57,13 @@ const sections = [
 
 <style scoped lang="scss">
 .tendances {
-  padding: 100px 0 4rem;
+  padding: 62px 0 4rem;
   display: flex;
   flex-direction: column;
   gap: 3rem;
 
   @media (max-width: 768px) {
-    padding: 80px 0 2rem;
+    padding: 62px 0 2rem;
     gap: 2rem;
   }
 }
