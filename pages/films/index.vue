@@ -18,143 +18,136 @@
 </template>
 
 <script setup lang="ts">
-import { useAPI } from "~/composables/api/useApi";
-import { useUtils } from "~/composables/global/useUtils";
-import type { TmdbGenre } from "~/types/ressources/TMDB/common";
+import { useAPI } from '~/composables/api/useApi'
+import { useUtils } from '~/composables/global/useUtils'
+import type { TmdbGenre } from '~/types/ressources/TMDB/common'
 
 definePageMeta({
-  key: "films",
-  layout: "main-layout",
-  order: 2,
-});
+  key: 'films',
+  layout: 'main-layout',
+  order: 2
+})
 
-useHead({ title: "Films" });
+useHead({ title: 'Films' })
 
-const genres = ref<TmdbGenre[]>([]);
-const selectedGenres = ref<number[]>([]);
+const genres = ref<TmdbGenre[]>([])
+const selectedGenres = ref<number[]>([])
 
-const today = new Date().toISOString().split("T")[0];
-const oneMonthAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
-  .toISOString()
-  .split("T")[0];
-const oneYearAgo = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000)
-  .toISOString()
-  .split("T")[0];
+const today = new Date().toISOString().split('T')[0]
 
 function genreParam(): Record<string, string> {
-  return selectedGenres.value.length
-    ? { with_genres: String(selectedGenres.value[0]) }
-    : {};
+  return selectedGenres.value.length ? { with_genres: String(selectedGenres.value[0]) } : {}
 }
 
 const sections = [
   {
-    title: "En ce moment au cinéma",
-    fetchFn: async (page: number) => {
-      const params: Record<string, string> = { page: String(page) };
-      if (selectedGenres.value.length) params.with_genres = String(selectedGenres.value[0]);
-      const { data, error } = await useAPI().tmdb.discover.getNowPlayingMovies(params);
-      if (error || !data) return null;
-      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages };
-    },
-  },
-  {
-    title: "À venir",
+    title: 'Populaires',
     fetchFn: async (page: number) => {
       const { data, error } = await useAPI().tmdb.discover.discoverMovies({
         page: String(page),
-        sort_by: "popularity.desc",
-        "primary_release_date.gte": today,
-        "popularity.gte": "10",
-        ...genreParam(),
-      });
-      if (error || !data) return null;
-      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages };
-    },
+        sort_by: 'popularity.desc',
+        ...genreParam()
+      })
+      if (error || !data) return null
+      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages }
+    }
   },
   {
-    title: "Populaires",
+    title: 'Actuellement au cinéma',
+    fetchFn: async (page: number) => {
+      const params: Record<string, string> = { page: String(page) }
+      if (selectedGenres.value.length) params.with_genres = String(selectedGenres.value[0])
+      const { data, error } = await useAPI().tmdb.discover.getNowPlayingMovies(params)
+      if (error || !data) return null
+      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages }
+    }
+  },
+  {
+    title: 'À venir',
     fetchFn: async (page: number) => {
       const { data, error } = await useAPI().tmdb.discover.discoverMovies({
         page: String(page),
-        sort_by: "popularity.desc",
-        ...genreParam(),
-      });
-      if (error || !data) return null;
-      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages };
-    },
+        sort_by: 'popularity.desc',
+        'primary_release_date.gte': today,
+        'popularity.gte': '10',
+        ...genreParam()
+      })
+      if (error || !data) return null
+      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages }
+    }
   },
+
   {
-    title: "Les mieux notés",
+    title: 'Les mieux notés',
     fetchFn: async (page: number) => {
       const { data, error } = await useAPI().tmdb.discover.discoverMovies({
         page: String(page),
-        sort_by: "vote_average.desc",
-        "vote_count.gte": "1000",
-        ...genreParam(),
-      });
-      if (error || !data) return null;
-      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages };
-    },
+        sort_by: 'vote_average.desc',
+        'vote_count.gte': '1000',
+        ...genreParam()
+      })
+      if (error || !data) return null
+      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages }
+    }
   },
   {
-    title: "Documentaires",
+    title: 'Documentaires',
     fetchFn: async (page: number) => {
       const { data, error } = await useAPI().tmdb.discover.discoverMovies({
         page: String(page),
-        sort_by: "popularity.desc",
-        with_genres: genreParam().with_genres ? `99,${genreParam().with_genres}` : "99",
-      });
-      if (error || !data) return null;
-      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages };
-    },
+        sort_by: 'popularity.desc',
+        with_genres: genreParam().with_genres ? `99,${genreParam().with_genres}` : '99'
+      })
+      if (error || !data) return null
+      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages }
+    }
   },
   {
     title: "Films d'animation",
     fetchFn: async (page: number) => {
       const { data, error } = await useAPI().tmdb.discover.discoverMovies({
         page: String(page),
-        sort_by: "popularity.desc",
-        with_genres: genreParam().with_genres ? `16,${genreParam().with_genres}` : "16",
-      });
-      if (error || !data) return null;
-      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages };
-    },
+        sort_by: 'popularity.desc',
+        with_genres: genreParam().with_genres ? `16,${genreParam().with_genres}` : '16'
+      })
+      if (error || !data) return null
+      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages }
+    }
   },
   {
-    title: "Réalisations françaises",
+    title: 'Réalisations françaises',
     fetchFn: async (page: number) => {
       const { data, error } = await useAPI().tmdb.discover.discoverMovies({
         page: String(page),
-        sort_by: "vote_count.desc",
-        with_original_language: "fr",
-        "vote_count.gte": "500",
-        ...genreParam(),
-      });
-      if (error || !data) return null;
-      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages };
-    },
+        sort_by: 'vote_count.desc',
+        with_original_language: 'fr',
+        'vote_count.gte': '500',
+        ...genreParam()
+      })
+      if (error || !data) return null
+      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages }
+    }
   },
   {
-    title: "Classiques",
+    title: 'Classiques',
     fetchFn: async (page: number) => {
       const { data, error } = await useAPI().tmdb.discover.discoverMovies({
         page: String(page),
-        sort_by: "vote_average.desc",
-        "primary_release_date.lte": "1990-12-31",
-        "vote_count.gte": "1000",
-        ...genreParam(),
-      });
-      if (error || !data) return null;
-      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages };
-    },
-  },
-];
+        sort_by: 'vote_average.desc',
+        'primary_release_date.lte': '1990-12-31',
+        'vote_count.gte': '1000',
+        ...genreParam()
+      })
+      if (error || !data) return null
+      return { items: data.results.map(useUtils().mappers.movie), totalPages: data.total_pages }
+    }
+  }
+]
 
 onMounted(async () => {
-  const { data } = await useAPI().tmdb.genre.getMovieGenres();
-  if (data) genres.value = data.genres;
-});
+  const { data } = await useAPI().tmdb.genre.getMovieGenres()
+  if (data) genres.value = data.genres
+})
 </script>
 
 <style scoped lang="scss">

@@ -24,24 +24,26 @@
 </template>
 
 <script setup lang="ts">
-import { CameraVideoIcon } from "@hugeicons/core-free-icons";
-import type { TmdbMedia } from "~/types/ressources/TMDB/common";
+import { CameraVideoIcon } from '@hugeicons/core-free-icons'
+import type { TmdbMedia } from '~/types/ressources/TMDB/common'
 
-defineProps<{
-  media: TmdbMedia;
-  href: string;
-}>();
+defineProps({
+  media: { type: Object as PropType<TmdbMedia>, required: true },
+  href: { type: String, required: true }
+})
 
-const router = useRouter();
+const router = useRouter()
+
 function onClick(href: string) {
-  router.push(href);
+  router.push(href)
 }
 </script>
 
 <style scoped lang="scss">
 .landscape-card {
   flex-shrink: 0;
-  width: 280px;
+  width: 300px;
+  aspect-ratio: 2/1.83;
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
@@ -111,7 +113,7 @@ function onClick(href: string) {
   }
 
   &__overview {
-    font-size: 11px;
+    font-size: 12px;
     color: #ffffff60;
     margin: 0;
     line-height: 1.5;

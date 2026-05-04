@@ -11,33 +11,30 @@
       @keydown.escape="clear"
     />
     <button class="search-module__btn" @click="toggleSearch">
-      <h-icon
-        :icon="store.isLoading ? Loading03Icon : Search01Icon"
-        color="#ffffff4d"
-      />
+      <h-icon :icon="store.isLoading ? Loading03Icon : Search01Icon" color="#ffffff4d" />
     </button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Search01Icon, Loading03Icon } from "@hugeicons/core-free-icons";
-import { useSearch } from "~/composables/global/search/useSearch";
-import { useSearchStore } from "~/store/useSearchStore";
+import { Search01Icon, Loading03Icon } from '@hugeicons/core-free-icons'
+import { useSearch } from '~/composables/global/search/useSearch'
+import { useSearchStore } from '~/store/useSearchStore'
 
-const store = useSearchStore();
-const { search, clear } = useSearch();
+const store = useSearchStore()
+const { search, clear } = useSearch()
 
-const isFocused = ref(false);
-const inputRef = ref<HTMLInputElement | null>(null);
+const isFocused = ref(false)
+const inputRef = ref<HTMLInputElement | null>(null)
 
 const toggleSearch = () => {
   if (store.isOpen) {
-    store.close();
+    store.close()
   } else {
-    store.isOpen = true;
-    nextTick(() => inputRef.value?.focus());
+    store.isOpen = true
+    nextTick(() => inputRef.value?.focus())
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

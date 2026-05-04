@@ -5,19 +5,13 @@
     </nuxt-link>
 
     <ul class="navbar__nav-list">
-      <li
-        v-for="route in sortedRoutes"
-        :key="route?.name"
-        class="navbar__nav-list__el"
-      >
+      <li v-for="route in sortedRoutes" :key="route?.name" class="navbar__nav-list__el">
         <nuxt-link
           :to="route.path"
           :title="route.name"
           class="navbar__nav-list__el__link"
           :class="{
-            'navbar__nav-list__el__link--active': currentRoute.path.startsWith(
-              route.path,
-            ),
+            'navbar__nav-list__el__link--active': currentRoute.path.startsWith(route.path)
           }"
         >
           {{ route.name }}
@@ -41,15 +35,12 @@
     <transition name="mobile-menu">
       <div v-if="mobileOpen" class="navbar__mobile-menu">
         <ul class="navbar__mobile-menu__list">
-          <li
-            v-for="route in sortedRoutes"
-            :key="route?.name"
-          >
+          <li v-for="route in sortedRoutes" :key="route?.name">
             <nuxt-link
               :to="route.path"
               class="navbar__mobile-menu__link"
               :class="{
-                'navbar__mobile-menu__link--active': currentRoute.path.startsWith(route.path),
+                'navbar__mobile-menu__link--active': currentRoute.path.startsWith(route.path)
               }"
               @click="mobileOpen = false"
             >
@@ -63,24 +54,27 @@
 </template>
 
 <script setup lang="ts">
-import { Menu01Icon, Cancel01Icon } from "@hugeicons/core-free-icons";
-import { useUtils } from "~/composables/global/useUtils";
-import { ERoute } from "~/types/enum/global/navigation";
+import { Menu01Icon, Cancel01Icon } from '@hugeicons/core-free-icons'
+import { useUtils } from '~/composables/global/useUtils'
+import { ERoute } from '~/types/enum/global/navigation'
 
-const userRoutes = useUtils().routes.excludes([ERoute.PRIVATE]);
-const currentRoute = useRoute();
+const userRoutes = useUtils().routes.excludes([ERoute.PRIVATE])
+const currentRoute = useRoute()
 
-const mobileOpen = ref(false);
+const mobileOpen = ref(false)
 
 const sortedRoutes = computed(() =>
   [...userRoutes]
     .filter((r) => r.meta?.order !== undefined && r.meta.order !== 0)
-    .sort((a, b) => (a.meta.order as number) - (b.meta.order as number)),
-);
+    .sort((a, b) => (a.meta.order as number) - (b.meta.order as number))
+)
 
-watch(() => currentRoute.path, () => {
-  mobileOpen.value = false;
-});
+watch(
+  () => currentRoute.path,
+  () => {
+    mobileOpen.value = false
+  }
+)
 </script>
 
 <style lang="scss" scoped>
@@ -110,7 +104,7 @@ watch(() => currentRoute.path, () => {
       text-align: center;
       &__link {
         color: #ffffff50;
-        font-size: 16px;
+        font-size: 18px;
         padding: 5px 16px;
         border-radius: 6px;
         text-decoration: none;
@@ -119,7 +113,7 @@ watch(() => currentRoute.path, () => {
         position: relative;
 
         &::after {
-          content: "";
+          content: '';
           position: absolute;
           bottom: -2px;
           left: 50%;
@@ -191,7 +185,6 @@ watch(() => currentRoute.path, () => {
   }
 }
 
-
 :global(.navbar__backdrop) {
   position: fixed;
   inset: 0;
@@ -232,7 +225,9 @@ watch(() => currentRoute.path, () => {
   color: #ffffff70;
   text-decoration: none;
   text-transform: capitalize;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
 }
 :global(.navbar__mobile-menu__link:hover) {
   background: #ffffff0d;
@@ -254,7 +249,9 @@ watch(() => currentRoute.path, () => {
 
 :global(.mobile-menu-enter-active),
 :global(.mobile-menu-leave-active) {
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
 }
 :global(.mobile-menu-enter-from),
 :global(.mobile-menu-leave-to) {
