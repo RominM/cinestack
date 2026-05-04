@@ -14,53 +14,52 @@
 </template>
 
 <script setup lang="ts">
-import { useAPI } from "~/composables/api/useApi";
-import { useUtils } from "~/composables/global/useUtils";
+import { useAPI } from '~/composables/api/useApi'
+import { useUtils } from '~/composables/global/useUtils'
 
 definePageMeta({
-  key: "tendances",
-  layout: "main-layout",
-  order: 1,
-});
+  key: 'tendances',
+  layout: 'main-layout',
+  order: 1
+})
 
-useHead({ title: "Tendances" });
+useHead({ title: 'Tendances' })
 
 const sections = [
   {
-    title: "Films de la semaine",
-    baseRoute: "/films",
+    title: 'Films de la semaine',
+    baseRoute: '/films',
     fetchFn: async (page: number) => {
-      const { data, error } =
-        await useAPI().tmdb.trending.getTrendingMoviesByWeek({
-          page: String(page),
-        });
-      if (error || !data) return null;
+      const { data, error } = await useAPI().tmdb.trending.getTrendingMoviesByWeek({
+        page: String(page)
+      })
+      if (error || !data) return null
       return {
         items: data.results.map(useUtils().mappers.movie),
-        totalPages: data.total_pages,
-      };
-    },
+        totalPages: data.total_pages
+      }
+    }
   },
   {
-    title: "Séries de la semaine",
-    baseRoute: "/series",
+    title: 'Séries de la semaine',
+    baseRoute: '/series',
     fetchFn: async (page: number) => {
       const { data, error } = await useAPI().tmdb.trending.getTrendingTVByWeek({
-        page: String(page),
-      });
-      if (error || !data) return null;
+        page: String(page)
+      })
+      if (error || !data) return null
       return {
         items: data.results.map(useUtils().mappers.tv),
-        totalPages: data.total_pages,
-      };
-    },
-  },
-];
+        totalPages: data.total_pages
+      }
+    }
+  }
+]
 </script>
 
 <style scoped lang="scss">
 .tendances {
-  padding: 62px 0 4rem;
+  padding: 80px 0 4rem;
   display: flex;
   flex-direction: column;
   gap: 3rem;
@@ -68,6 +67,7 @@ const sections = [
   &--title {
     padding-left: 20px;
     color: #fff;
+    display: none;
     @media (max-width: 768px) {
       display: block;
     }
