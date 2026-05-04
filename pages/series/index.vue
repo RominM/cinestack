@@ -18,105 +18,101 @@
 </template>
 
 <script setup lang="ts">
-import { useAPI } from "~/composables/api/useApi";
-import { useUtils } from "~/composables/global/useUtils";
-import type { TmdbGenre } from "~/types/ressources/TMDB/common";
+import { useAPI } from '~/composables/api/useApi'
+import { useUtils } from '~/composables/global/useUtils'
+import type { TmdbGenre } from '~/types/ressources/TMDB/common'
 
 definePageMeta({
-  key: "series",
-  layout: "main-layout",
-  order: 3,
-});
+  key: 'series',
+  layout: 'main-layout',
+  order: 3
+})
 
-useHead({ title: "Séries" });
+useHead({ title: 'Séries' })
 
-const genres = ref<TmdbGenre[]>([]);
-const selectedGenres = ref<number[]>([]);
+const genres = ref<TmdbGenre[]>([])
+const selectedGenres = ref<number[]>([])
 
-const today = new Date().toISOString().split("T")[0];
-const twoYearsAgo = new Date(Date.now() - 2 * 365 * 24 * 60 * 60 * 1000)
-  .toISOString()
-  .split("T")[0];
+const today = new Date().toISOString().split('T')[0]
+const twoYearsAgo = new Date(Date.now() - 2 * 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
 
 function genreParam(): Record<string, string> {
-  return selectedGenres.value.length
-    ? { with_genres: String(selectedGenres.value[0]) }
-    : {};
+  return selectedGenres.value.length ? { with_genres: String(selectedGenres.value[0]) } : {}
 }
 
 const sections = [
   {
-    title: "Populaires",
+    title: 'Populaires',
     fetchFn: async (page: number) => {
       const { data, error } = await useAPI().tmdb.discover.discoverTV({
         page: String(page),
-        sort_by: "popularity.desc",
-        ...genreParam(),
-      });
-      if (error || !data) return null;
+        sort_by: 'popularity.desc',
+        ...genreParam()
+      })
+      if (error || !data) return null
       return {
         items: data.results.map(useUtils().mappers.tv),
-        totalPages: data.total_pages,
-      };
-    },
+        totalPages: data.total_pages
+      }
+    }
   },
   {
-    title: "Les mieux notées",
+    title: 'Les mieux notées',
     fetchFn: async (page: number) => {
       const { data, error } = await useAPI().tmdb.discover.discoverTV({
         page: String(page),
-        sort_by: "vote_average.desc",
-        "vote_count.gte": "200",
-        ...genreParam(),
-      });
-      if (error || !data) return null;
+        sort_by: 'vote_average.desc',
+        'vote_count.gte': '200',
+        ...genreParam()
+      })
+      if (error || !data) return null
       return {
         items: data.results.map(useUtils().mappers.tv),
-        totalPages: data.total_pages,
-      };
-    },
+        totalPages: data.total_pages
+      }
+    }
   },
   {
-    title: "Nouvelles séries",
+    title: 'Nouvelles séries',
     fetchFn: async (page: number) => {
       const { data, error } = await useAPI().tmdb.discover.discoverTV({
         page: String(page),
-        sort_by: "first_air_date.desc",
-        "first_air_date.lte": today,
-        "first_air_date.gte": twoYearsAgo,
-        "vote_count.gte": "20",
-        ...genreParam(),
-      });
-      if (error || !data) return null;
+        sort_by: 'first_air_date.desc',
+        'first_air_date.lte': today,
+        'first_air_date.gte': twoYearsAgo,
+        'vote_count.gte': '20',
+        ...genreParam()
+      })
+      if (error || !data) return null
       return {
         items: data.results.map(useUtils().mappers.tv),
-        totalPages: data.total_pages,
-      };
-    },
+        totalPages: data.total_pages
+      }
+    }
   },
   {
-    title: "Animations",
+    title: 'Animations',
     fetchFn: async (page: number) => {
-      const genreP = genreParam();
-      const withGenres = genreP.with_genres ? `16,${genreP.with_genres}` : "16";
+      const genreP = genreParam()
+      const withGenres = genreP.with_genres ? `16,${genreP.with_genres}` : '16'
       const { data, error } = await useAPI().tmdb.discover.discoverTV({
         page: String(page),
-        sort_by: "popularity.desc",
-        with_genres: withGenres,
-      });
-      if (error || !data) return null;
+        sort_by: 'popularity.desc',
+        with_genres: withGenres
+      })
+      if (error || !data) return null
       return {
         items: data.results.map(useUtils().mappers.tv),
-        totalPages: data.total_pages,
-      };
-    },
-  },
-];
+        totalPages: data.total_pages
+      }
+    }
+  }
+]
 
 onMounted(async () => {
-  const { data } = await useAPI().tmdb.genre.getTVGenres();
-  if (data) genres.value = data.genres;
-});
+  const { data } = await useAPI().tmdb.genre.getTVGenres()
+  if (data) genres.value = data.genres
+})
 </script>
 
 <style scoped lang="scss">
@@ -136,6 +132,7 @@ onMounted(async () => {
   &--title {
     padding-left: 20px;
     color: #fff;
+    display: none;
     @media (max-width: 768px) {
       display: block;
     }
