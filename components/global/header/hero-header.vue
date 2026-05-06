@@ -1,25 +1,25 @@
 <template>
   <div class="hero-header">
     <div class="hero-header__track" :style="trackStyle">
-      <div
-        v-for="(item, i) in movies"
-        :key="item.id"
-        class="hero-header__slide"
-      >
+      <div v-for="(item, i) in movies" :key="item.id" class="hero-header__slide">
         <img
           v-if="item.backdropPath"
           :src="`https://image.tmdb.org/t/p/original${item.backdropPath}`"
           :alt="item.name"
-          :style="
-            i === currentIndex
-              ? { transform: `translateY(${parallaxOffset}px)` }
-              : {}
-          "
+          :style="i === currentIndex ? { transform: `translateY(${parallaxOffset}px)` } : {}"
         />
         <div v-else class="hero-header__slide__fallback">
           <h-icon :icon="CameraVideoIcon" color="#fff" :size="120" />
           <span style="color: #fff">{{ item.name }}</span>
         </div>
+
+        <iframe
+          v-if="i === currentIndex && trailerReady && item.trailerKey"
+          :src="`https://www.youtube.com/embed/${item.trailerKey}?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0&playsinline=1`"
+          frameborder="0"
+          allow="autoplay; encrypted-media"
+          :class="['hero-header__slide__trailer', { 'hero-header__slide__trailer--visible': trailerVisible }]"
+        />
 
         <div class="hero-header__slide__gradient" />
         <hero-content v-if="showContent" :media="item" />
@@ -38,51 +38,121 @@
 </template>
 
 <script setup lang="ts">
-import { CameraVideoIcon } from "@hugeicons/core-free-icons";
-import type { TmdbMedia } from "~/types/ressources/TMDB/common";
+import { CameraVideoIcon } from '@hugeicons/core-free-icons'
+import type { TmdbMedia } from '~/types/ressources/TMDB/common'
+import { useTrailerAvailability } from '~/composables/global/useTrailerAvailability'
 
 const props = defineProps({
   movies: {
     type: Array as PropType<TmdbMedia[]>,
-    required: true,
+    required: true
   },
-  showContent: { type: Boolean, default: false },
-});
+  showContent: { type: Boolean, default: false }
+})
 
-const currentIndex = ref(0);
-const parallaxOffset = ref(0);
+const TRAILER_DISPLAY_MS = 20_000
+const TRAILER_DELAY_MS = 4_500
+const FADE_MS = 1_500
+
+const currentIndex = ref(0)
+const parallaxOffset = ref(0)
+const trailerReady = ref(false)
+const trailerVisible = ref(false)
 
 const trackStyle = computed(() => ({
-  transform: `translateX(-${currentIndex.value * 100}%)`,
-}));
+  transform: `translateX(-${currentIndex.value * 100}%)`
+}))
 
-let autoplayInterval: ReturnType<typeof setInterval> | null = null;
-let rafId: number | null = null;
+let autoplayInterval: ReturnType<typeof setInterval> | null = null
+let trailerTimeout: ReturnType<typeof setTimeout> | null = null
+let remountTimeout: ReturnType<typeof setTimeout> | null = null
+let rafId: number | null = null
+let resetGen = 0
 
-function onScroll() {
-  if (rafId) cancelAnimationFrame(rafId);
-  rafId = requestAnimationFrame(() => {
-    parallaxOffset.value = window.scrollY * 0.4;
-  });
+function clearAllTimers() {
+  if (trailerTimeout) {
+    clearTimeout(trailerTimeout)
+    trailerTimeout = null
+  }
+  if (remountTimeout) {
+    clearTimeout(remountTimeout)
+    remountTimeout = null
+  }
 }
 
-onMounted(() => window.addEventListener("scroll", onScroll));
+const { checkTrailerAvailable } = useTrailerAvailability()
+
+async function resetTrailerTimer() {
+  const gen = ++resetGen
+  clearAllTimers()
+  trailerVisible.value = false
+  trailerReady.value = false
+
+  const key = props.movies[currentIndex.value]?.trailerKey
+  if (!key) return
+
+  const available = await checkTrailerAvailable(key)
+  if (gen !== resetGen) return
+
+  if (!available) return
+
+  trailerReady.value = true
+  trailerTimeout = setTimeout(() => {
+    trailerVisible.value = true
+    trailerTimeout = setTimeout(cycleTrailer, TRAILER_DISPLAY_MS)
+  }, TRAILER_DELAY_MS)
+}
+
+function cycleTrailer() {
+  clearAllTimers()
+  trailerVisible.value = false
+
+  trailerTimeout = setTimeout(() => {
+    trailerReady.value = false
+    remountTimeout = setTimeout(() => {
+      remountTimeout = null
+      if (!props.movies[currentIndex.value]?.trailerKey) return
+      trailerReady.value = true
+      trailerTimeout = setTimeout(() => {
+        trailerVisible.value = true
+        trailerTimeout = setTimeout(cycleTrailer, TRAILER_DISPLAY_MS)
+      }, TRAILER_DELAY_MS)
+    }, 100)
+  }, FADE_MS)
+}
+
+function onScroll() {
+  if (rafId) cancelAnimationFrame(rafId)
+  rafId = requestAnimationFrame(() => {
+    parallaxOffset.value = window.scrollY * 0.4
+  })
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', onScroll)
+  resetTrailerTimer()
+})
+
 onUnmounted(() => {
-  window.removeEventListener("scroll", onScroll);
-  if (autoplayInterval) clearInterval(autoplayInterval);
-});
+  window.removeEventListener('scroll', onScroll)
+  if (autoplayInterval) clearInterval(autoplayInterval)
+  clearAllTimers()
+})
+
+watch(currentIndex, resetTrailerTimer)
 
 watch(
   () => props.movies.length,
   (length) => {
     if (length > 1 && !autoplayInterval) {
       autoplayInterval = setInterval(() => {
-        currentIndex.value = (currentIndex.value + 1) % props.movies.length;
-      }, 7000);
+        currentIndex.value = (currentIndex.value + 1) % props.movies.length
+      }, 7000)
     }
+    resetTrailerTimer()
   },
-  { immediate: true },
-);
+  { immediate: true }
+)
 </script>
 
 <style scoped lang="scss">
@@ -113,6 +183,27 @@ watch(
       object-fit: cover;
       object-position: center top;
     }
+
+    &__trailer {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100vw;
+      height: 56.25vw;
+      min-height: 100%;
+      min-width: 177.78vh;
+      transform: translate(-50%, -50%);
+      border: none;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 1.5s ease;
+      z-index: 1;
+
+      &--visible {
+        opacity: 1;
+      }
+    }
+
     &__fallback {
       display: flex;
       flex-direction: column;
@@ -121,6 +212,7 @@ watch(
       gap: 20px;
       height: 100%;
     }
+
     &__gradient {
       position: absolute;
       bottom: 0;
@@ -129,7 +221,7 @@ watch(
       height: 70%;
       background: linear-gradient(to top, $dark-bg 0%, transparent 100%);
       pointer-events: none;
-      z-index: 1;
+      z-index: 2;
     }
   }
 

@@ -107,4 +107,5 @@ export type TmdbMedia = {
   runtime?: number
   status?: string
   homepage?: string
+  trailerKey?: string
 }

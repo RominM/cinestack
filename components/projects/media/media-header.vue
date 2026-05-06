@@ -22,7 +22,7 @@
     </div>
 
     <button
-      v-if="trailerKey"
+      v-if="trailerKey && trailerAvailable"
       class="media-header__trailer-btn"
       @click="isTrailerOpen = true"
     >
@@ -54,6 +54,7 @@
 
 <script setup lang="ts">
 import type { TmdbGenre } from "~/types/ressources/TMDB/common";
+import { useTrailerAvailability } from "~/composables/global/useTrailerAvailability";
 
 const props = defineProps({
   posterPath: { type: String as PropType<string | null>, default: null },
@@ -69,10 +70,16 @@ const props = defineProps({
 
 const isTrailerOpen = ref(false);
 const isVideoLoaded = ref(false);
+const trailerAvailable = ref(false);
+const { checkTrailerAvailable } = useTrailerAvailability();
 
 watch(isTrailerOpen, (val) => {
   if (!val) isVideoLoaded.value = false;
 });
+
+watch(() => props.trailerKey, async (key) => {
+  trailerAvailable.value = key ? await checkTrailerAvailable(key) : false
+}, { immediate: true });
 
 const releaseYear = computed(() => props.releaseDate?.split("-")[0]);
 

@@ -3,6 +3,14 @@ import type { TmdbMedia } from '~/types/ressources/TMDB/common'
 import type { TmdbMovie, TmdbMovieDetail } from '~/types/ressources/TMDB/movie'
 import type { TmdbTV, TmdbTVDetail } from '~/types/ressources/TMDB/tv'
 
+function extractTrailerKey(videos?: { results: { site: string; type: string; key: string; official: boolean }[] }): string | undefined {
+  if (!videos?.results?.length) return undefined
+  const trailer = videos.results.find(v => v.site === 'YouTube' && v.type === 'Trailer' && v.official)
+    ?? videos.results.find(v => v.site === 'YouTube' && v.type === 'Trailer')
+    ?? videos.results.find(v => v.site === 'YouTube')
+  return trailer?.key
+}
+
 export function mapMovieToMedia(movie: TmdbMovie | TmdbMovieDetail): TmdbMedia {
   return {
     id: movie.id,
@@ -22,6 +30,7 @@ export function mapMovieToMedia(movie: TmdbMovie | TmdbMovieDetail): TmdbMedia {
     runtime: 'runtime' in movie ? movie.runtime : undefined,
     status: 'status' in movie ? movie.status : undefined,
     homepage: 'homepage' in movie ? movie.homepage : undefined,
+    trailerKey: 'videos' in movie ? extractTrailerKey(movie.videos) : undefined,
   }
 }
 
@@ -44,5 +53,6 @@ export function mapTVToMedia(tv: TmdbTV | TmdbTVDetail): TmdbMedia {
     runtime: 'episode_run_time' in tv ? tv.episode_run_time[0] : undefined,
     status: 'status' in tv ? tv.status : undefined,
     homepage: 'homepage' in tv ? tv.homepage : undefined,
+    trailerKey: 'videos' in tv ? extractTrailerKey(tv.videos) : undefined,
   }
 }
