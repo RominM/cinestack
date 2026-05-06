@@ -190,7 +190,7 @@ watch(
       left: 50%;
       width: 100vw;
       height: 56.25vw;
-      min-height: 130%;
+      min-height: 140%;
       min-width: 177.78vh;
       transform: translate(-50%, -50%);
       border: none;
